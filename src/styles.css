@@ -1,0 +1,172 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Load Cormorant Garamond + Karla */
+@font-face { font-family: "preload"; src: local("Karla"); }
+
+@theme inline {
+  --font-sans: "Karla", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", "Cormorant", ui-serif, Georgia, serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Light — Emerald Prestige */
+  --background: oklch(0.985 0.012 95);          /* warm cream */
+  --foreground: oklch(0.22 0.04 165);            /* deep emerald ink */
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.04 165);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.04 165);
+
+  --primary: oklch(0.38 0.10 165);               /* deep emerald */
+  --primary-foreground: oklch(0.985 0.02 95);
+
+  --secondary: oklch(0.94 0.02 95);
+  --secondary-foreground: oklch(0.28 0.06 165);
+
+  --muted: oklch(0.95 0.015 95);
+  --muted-foreground: oklch(0.48 0.03 160);
+
+  --accent: oklch(0.92 0.05 90);
+  --accent-foreground: oklch(0.28 0.06 165);
+
+  --gold: oklch(0.78 0.13 85);                   /* warm gold */
+  --gold-foreground: oklch(0.22 0.05 165);
+
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  --border: oklch(0.88 0.02 95);
+  --input: oklch(0.92 0.018 95);
+  --ring: oklch(0.55 0.10 165);
+
+  --sidebar: oklch(0.30 0.06 165);
+  --sidebar-foreground: oklch(0.96 0.02 95);
+  --sidebar-primary: oklch(0.78 0.13 85);
+  --sidebar-primary-foreground: oklch(0.22 0.05 165);
+  --sidebar-accent: oklch(0.36 0.07 165);
+  --sidebar-accent-foreground: oklch(0.96 0.02 95);
+  --sidebar-border: oklch(0.38 0.06 165);
+  --sidebar-ring: oklch(0.78 0.13 85);
+
+  --gradient-hero: linear-gradient(135deg, oklch(0.30 0.08 165) 0%, oklch(0.22 0.05 170) 60%, oklch(0.18 0.04 175) 100%);
+  --gradient-gold: linear-gradient(135deg, oklch(0.82 0.14 90), oklch(0.72 0.12 75));
+  --shadow-elegant: 0 20px 60px -20px color-mix(in oklab, oklch(0.30 0.08 165) 35%, transparent);
+  --shadow-gold: 0 10px 40px -12px color-mix(in oklab, oklch(0.78 0.13 85) 50%, transparent);
+}
+
+.dark {
+  --background: oklch(0.15 0.02 170);
+  --foreground: oklch(0.96 0.02 95);
+
+  --card: oklch(0.20 0.03 170);
+  --card-foreground: oklch(0.96 0.02 95);
+
+  --popover: oklch(0.20 0.03 170);
+  --popover-foreground: oklch(0.96 0.02 95);
+
+  --primary: oklch(0.62 0.13 165);               /* brighter emerald in dark */
+  --primary-foreground: oklch(0.98 0.02 95);
+
+  --secondary: oklch(0.25 0.04 170);
+  --secondary-foreground: oklch(0.96 0.02 95);
+
+  --muted: oklch(0.23 0.03 170);
+  --muted-foreground: oklch(0.72 0.03 95);
+
+  --accent: oklch(0.30 0.06 165);
+  --accent-foreground: oklch(0.96 0.02 95);
+
+  --gold: oklch(0.82 0.14 88);
+  --gold-foreground: oklch(0.18 0.04 170);
+
+  --destructive: oklch(0.65 0.20 27);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: oklch(1 0 0 / 0.10);
+  --input: oklch(1 0 0 / 0.14);
+  --ring: oklch(0.78 0.13 85);
+
+  --sidebar: oklch(0.18 0.03 170);
+  --sidebar-foreground: oklch(0.96 0.02 95);
+  --sidebar-primary: oklch(0.82 0.14 88);
+  --sidebar-primary-foreground: oklch(0.18 0.04 170);
+  --sidebar-accent: oklch(0.25 0.04 170);
+  --sidebar-accent-foreground: oklch(0.96 0.02 95);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+  --sidebar-ring: oklch(0.82 0.14 88);
+
+  --gradient-hero: linear-gradient(135deg, oklch(0.20 0.05 170) 0%, oklch(0.14 0.03 175) 60%, oklch(0.10 0.02 180) 100%);
+  --gradient-gold: linear-gradient(135deg, oklch(0.85 0.14 90), oklch(0.70 0.12 70));
+  --shadow-elegant: 0 20px 60px -20px color-mix(in oklab, oklch(0 0 0) 60%, transparent);
+  --shadow-gold: 0 10px 40px -12px color-mix(in oklab, oklch(0.82 0.14 88) 35%, transparent);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@utility bg-gradient-hero { background-image: var(--gradient-hero); }
+@utility bg-gradient-gold { background-image: var(--gradient-gold); }
+@utility shadow-elegant { box-shadow: var(--shadow-elegant); }
+@utility shadow-gold { box-shadow: var(--shadow-gold); }
+@utility text-gold { color: var(--color-gold); }
+
+@utility arabesque {
+  background-image:
+    radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--color-gold) 30%, transparent) 1px, transparent 0);
+  background-size: 24px 24px;
+}
