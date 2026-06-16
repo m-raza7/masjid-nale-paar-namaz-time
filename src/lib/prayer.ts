@@ -53,29 +53,6 @@ function toMinutes(t: string | null): number | null {
   return h * 60 + m;
 }
 
-// export function currentAndNextPrayer(row: PrayerRow | null | undefined, now = new Date()) {
-//   if (!row)
-//     return { current: null as PrayerSlot | null, next: null as PrayerSlot | null, msToNext: 0 };
-//   const slots = toSlots(row).filter((s) => s.name !== "Sunrise");
-//   const nowMin = now.getHours() * 60 + now.getMinutes();
-//   let current: PrayerSlot | null = null;
-//   let next: PrayerSlot | null = null;
-//   for (let i = 0; i < slots.length; i++) {
-//     const m = toMinutes(slots[i].azan);
-//     if (m === null) continue;
-//     if (m <= nowMin) current = slots[i];
-//     else {
-//       next = slots[i];
-//       break;
-//     }
-//   }
-//   if (!next) next = slots.find((s) => toMinutes(s.azan) !== null) ?? null;
-//   const nextMin = toMinutes(next?.azan ?? null);
-//   if (nextMin === null) return { current, next, msToNext: 0 };
-//   const diff = nextMin > nowMin ? nextMin - nowMin : nextMin + (24 * 60 - nowMin);
-//   return { current, next, msToNext: diff * 60 * 1000 };
-// }
-
 export function currentAndNextPrayer(row: PrayerRow | null | undefined, now = new Date()) {
   if (!row) {
     return {
@@ -89,17 +66,19 @@ export function currentAndNextPrayer(row: PrayerRow | null | undefined, now = ne
     .filter((s) => s.name !== "Sunrise")
     .filter((s) => s.jamaat);
 
-  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
   let current: PrayerSlot | null = null;
   let next: PrayerSlot | null = null;
 
   for (let i = 0; i < slots.length; i++) {
-    const m = toMinutes(slots[i].jamaat);
+    const minutes = toMinutes(slots[i].jamaat);
 
-    if (m === null) continue;
+    if (minutes === null) continue;
 
-    if (m <= nowMin) {
+    const prayerSeconds = minutes * 60;
+
+    if (prayerSeconds <= nowSeconds) {
       current = slots[i];
     } else {
       next = slots[i];
@@ -108,21 +87,28 @@ export function currentAndNextPrayer(row: PrayerRow | null | undefined, now = ne
   }
 
   if (!next) {
-    next = slots.find((s) => toMinutes(s.jamaat) !== null) ?? null;
+    next = slots[0] ?? null;
   }
 
-  const nextMin = toMinutes(next?.jamaat ?? null);
+  const nextMinutes = toMinutes(next?.jamaat ?? null);
 
-  if (nextMin === null) {
-    return { current, next, msToNext: 0 };
+  if (nextMinutes === null) {
+    return {
+      current,
+      next,
+      msToNext: 0,
+    };
   }
 
-  const diff = nextMin > nowMin ? nextMin - nowMin : nextMin + (24 * 60 - nowMin);
+  const nextSeconds = nextMinutes * 60;
+
+  const remainingSeconds =
+    nextSeconds > nowSeconds ? nextSeconds - nowSeconds : nextSeconds + (24 * 3600 - nowSeconds);
 
   return {
     current,
     next,
-    msToNext: diff * 60 * 1000,
+    msToNext: remainingSeconds * 1000,
   };
 }
 

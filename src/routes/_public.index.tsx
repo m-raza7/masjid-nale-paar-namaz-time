@@ -35,11 +35,6 @@ function HomePage() {
     queryKey: ["prayer-schedule"],
     queryFn: async () => {
       const { data } = await supabase
-        // .from("prayer_times")
-        // .select("*")
-        // .order("updated_at", { ascending: false })
-        // .limit(1)
-        // .maybeSingle();
         .from("prayer_times")
         .select("*")
         .eq("date", SCHEDULE_DATE)
@@ -72,23 +67,25 @@ function HomePage() {
     },
   });
 
+  function getHijriDate() {
+    const today = new Date();
+
+    return new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(today);
+  }
+
   const [now, setNow] = useState(new Date());
-  const [hijriDate, setHijriDate] = useState("");
+
   useEffect(() => {
-    updateHijriDate();
-    const id = setInterval(() => setNow(new Date()), 1000);
+    const id = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
     return () => clearInterval(id);
   }, []);
-
-  const updateHijriDate = () => {
-    setHijriDate(
-      new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date()),
-    );
-  };
 
   const { current, next, msToNext } = currentAndNextPrayer(prayer ?? null, now);
   const slots = prayer ? toSlots(prayer) : [];
@@ -101,7 +98,7 @@ function HomePage() {
         <div className="container relative mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:py-28">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-gold">
-              <Sparkles className="h-3 w-3" /> {hijriDate}
+              <Sparkles className="h-3 w-3" /> {getHijriDate()}
             </div>
             <h1 className="mt-6 font-display text-5xl leading-[1.05] md:text-7xl">
               Stand for prayer
@@ -158,7 +155,7 @@ function HomePage() {
                 <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Current Time
                 </div>
-                <div className="mt-2 font-display text-5xl tabular-nums text-primary">
+                <div className="mt-2 font-display text-4xl tabular-nums text-primary">
                   {now.toLocaleTimeString(undefined, {
                     hour12: true,
                   })}
@@ -166,7 +163,7 @@ function HomePage() {
                 <div className="mt-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Time remaining
                 </div>
-                <div className="mt-1 font-display text-3xl tabular-nums text-gold">
+                <div className="mt-1 font-display text-5xl tabular-nums text-gold">
                   {formatCountdown(msToNext)}
                 </div>
               </div>
@@ -197,8 +194,9 @@ function HomePage() {
             Full schedule →
           </Link>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          {slots.map((s) => (
+        {/* <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"> */}
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          {slots.map((s: ReturnType<typeof toSlots>[number]) => (
             <div
               key={s.name}
               className="group rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:shadow-elegant"

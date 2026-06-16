@@ -64,12 +64,13 @@ function PrayerTimesPage() {
       <div className="mx-auto mt-10 max-w-xl rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elegant">
         <div className="text-xs uppercase tracking-[0.2em] text-gold">Next prayer</div>
         <div className="mt-2 font-display text-5xl">{next?.name ?? "—"}</div>
-        <div className="mt-1 text-gold">{formatTime12(next?.azan ?? null)}</div>
-        <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Current Time</div>
-        <div className="mt-2 font-display text-5xl tabular-nums text-gold">
-          {now.toLocaleTimeString(undefined, { hour12: false })}
+        <div className="mt-2 text-gold">{formatTime12(next?.azan ?? null)}</div>
+        <div className="mt-2 text-xs uppercase tracking-[0.2em] tabular-nums">Current Time</div>
+        <div className="font-display text-5xl tabular-nums text-gold">
+          {now.toLocaleTimeString(undefined, { hour12: true })}
         </div>
-        <div className="mt-6 font-display text-6xl tabular-nums">{formatCountdown(msToNext)}</div>
+        <div className="mt-5 text-xs uppercase tracking-[0.2em] tabular-nums">Time remaining</div>
+        <div className="font-display text-6xl tabular-nums">{formatCountdown(msToNext)}</div>
       </div>
 
       <div className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
