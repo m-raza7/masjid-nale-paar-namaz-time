@@ -61,7 +61,7 @@ function PrayerTimesPage() {
         </p>
       </div>
 
-      <div className="mx-auto mt-10 max-w-xl rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elegant">
+      <div className="mx-auto mt-10 max-w-xl border border-gold/20 rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elegant">
         <div className="text-xs uppercase tracking-[0.2em] text-gold">Next prayer</div>
         <div className="mt-2 font-display text-5xl">{next?.name ?? "—"}</div>
         <div className="mt-2 text-gold">{formatTime12(next?.azan ?? null)}</div>
