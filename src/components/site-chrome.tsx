@@ -5,12 +5,17 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
-const nav = [
+const nav: { to: string; label: string; external?: boolean }[] = [
   { to: "/", label: "Home" },
   { to: "/prayer-times", label: "Prayer Times" },
   { to: "/announcements", label: "Announcements" },
   { to: "/events", label: "Events" },
-] as const;
+  {
+    to: "https://madarsa-nale-paar.vercel.app/",
+    label: "Madarsa - Nale Paar",
+    external: true,
+  },
+];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -28,19 +33,38 @@ export function SiteHeader() {
             </div>
           </div>
         </Link>
+
         <nav className="hidden items-center gap-1 md:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              activeProps={{ className: "bg-accent text-foreground" }}
-              activeOptions={{ exact: n.to === "/" }}
-            >
-              {n.label}
-            </Link>
-          ))}
+          {nav.map((n) =>
+            n.external ? (
+              <a
+                key={n.label}
+                href={n.to}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              >
+                {n.label}
+              </a>
+            ) : (
+              <Link
+                key={n.to}
+                to={n.to}
+                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                activeProps={{ className: "bg-accent text-foreground" }}
+                activeOptions={{ exact: n.to === "/" }}
+              >
+                {n.label}
+              </Link>
+            ),
+          )}
         </nav>
+        {/* <a
+            href="https://madarsa-nale-paar.vercel.app/"
+            className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            Madarsa - Nale Paar
+          </a> */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Link

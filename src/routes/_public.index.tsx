@@ -73,7 +73,9 @@ function HomePage() {
   });
 
   const [now, setNow] = useState(new Date());
+  const [hijri, setHijri] = useState("");
   useEffect(() => {
+    setHijri(hijriDate(new Date()));
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
@@ -89,7 +91,7 @@ function HomePage() {
         <div className="container relative mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:py-28">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-gold">
-              <Sparkles className="h-3 w-3" /> {hijriDate(now)}
+              <Sparkles className="h-3 w-3" /> {hijri}
             </div>
             <h1 className="mt-6 font-display text-5xl leading-[1.05] md:text-7xl">
               Stand for prayer
@@ -147,7 +149,9 @@ function HomePage() {
                   Current Time
                 </div>
                 <div className="mt-2 font-display text-5xl tabular-nums text-primary">
-                  {now.toLocaleTimeString(undefined, { hour12: false })}
+                  {now.toLocaleTimeString(undefined, {
+                    hour12: true,
+                  })}
                 </div>
                 <div className="mt-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Time remaining
