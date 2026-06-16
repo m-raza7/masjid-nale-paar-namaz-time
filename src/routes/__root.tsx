@@ -77,17 +77,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Al-Noor Masjid — Azan & Prayer Timetable" },
-      { name: "description", content: "Daily Azan, Jamaat times, monthly timetable, Jumuah, announcements and community events at Al-Noor Masjid." },
-      { property: "og:title", content: "Al-Noor Masjid — Azan & Prayer Timetable" },
-      { property: "og:description", content: "Daily Azan, Jamaat times, monthly timetable, Jumuah, announcements and community events." },
+      { title: "Nale-paar Masjid — Azan & Prayer Timetable" },
+      {
+        name: "description",
+        content:
+          "Daily Azan, Jamaat times, monthly timetable, Jumuah, announcements and community events at Nale-paar Masjid.",
+      },
+      { property: "og:title", content: "Nale-paar Masjid — Azan & Prayer Timetable" },
+      {
+        property: "og:description",
+        content:
+          "Daily Azan, Jamaat times, monthly timetable, Jumuah, announcements and community events.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Karla:wght@300;400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Karla:wght@300;400;500;600;700&display=swap",
+      },
       { rel: "stylesheet", href: appCss },
     ],
   }),

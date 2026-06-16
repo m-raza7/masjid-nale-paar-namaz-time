@@ -113,7 +113,7 @@ CREATE TRIGGER trg_mosque_info_updated BEFORE UPDATE ON public.mosque_info
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 INSERT INTO public.mosque_info (name, address, phone, email, about)
-VALUES ('Al-Noor Masjid', '123 Crescent Lane, City', '+1 (555) 123-4567', 'info@alnoor.masjid',
+VALUES ('Nale-paar Masjid', '123 Crescent Lane, City', '+1 (555) 123-4567', 'info@alnoor.masjid',
 'A community masjid serving the local Muslim community with daily prayers, Jumuah, education, and outreach.');
 
 -- Auto-grant admin role to the first user that signs up; subsequent users get 'user'
@@ -147,7 +147,7 @@ SELECT
 FROM generate_series(date_trunc('month', now())::date, (date_trunc('month', now()) + interval '2 month' - interval '1 day')::date, '1 day') d;
 
 INSERT INTO public.announcements (title, description) VALUES
-('Welcome to Al-Noor Masjid', 'Jumuah prayer begins at 1:15 PM every Friday. Please arrive early.'),
+('Welcome to Nale-paar Masjid', 'Jumuah prayer begins at 1:15 PM every Friday. Please arrive early.'),
 ('Quran Halaqa', 'Weekly Quran circle every Saturday after Maghrib in the main hall.');
 
 INSERT INTO public.events (title, description, event_date, start_time, end_time, location) VALUES
