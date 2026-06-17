@@ -14,7 +14,7 @@ import {
 export const Route = createFileRoute("/_public/prayer-times")({
   head: () => ({
     meta: [
-      { title: "Today's Prayer Times — Nale-paar Masjid" },
+      { title: "Today's Prayer Times — Masjid Nale-paar" },
       {
         name: "description",
         content: "Today's Azan and Jamaat times for Fajr, Zuhr, Asr, Maghrib and Isha.",

@@ -6,7 +6,7 @@ import { formatTime12, type PrayerRow } from "@/lib/prayer";
 export const Route = createFileRoute("/_public/monthly-timetable")({
   head: () => ({
     meta: [
-      { title: "Monthly Prayer Timetable — Nale-paar Masjid" },
+      { title: "Monthly Prayer Timetable — Masjid Nale-paar" },
       {
         name: "description",
         content: "Full monthly Azan and Jamaat prayer timetable for the masjid.",

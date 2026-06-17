@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_public/announcements")({
   head: () => ({
     meta: [
-      { title: "Announcements — Nale-paar Masjid" },
+      { title: "Announcements — Masjid Nale-paar" },
       {
         name: "description",
         content: "Latest news and announcements from the masjid administration.",

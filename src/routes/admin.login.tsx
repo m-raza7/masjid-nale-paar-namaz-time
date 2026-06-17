@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/admin/login")({
-  head: () => ({ meta: [{ title: "Admin Login — Nale-paar Masjid" }] }),
+  head: () => ({ meta: [{ title: "Admin Login — Masjid Nale-paar" }] }),
   component: AdminLogin,
 });
 
@@ -64,7 +64,7 @@ function AdminLogin() {
           <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-gold">
             <Moon className="h-5 w-5 text-gold-foreground" />
           </span>
-          <span className="font-display text-2xl">Nale-paar Masjid</span>
+          <span className="font-display text-2xl">Masjid Nale-paar</span>
         </Link>
         <div className="relative">
           <h1 className="font-display text-5xl">

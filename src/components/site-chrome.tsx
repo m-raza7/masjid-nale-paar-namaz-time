@@ -27,7 +27,7 @@ export function SiteHeader() {
             <Moon className="h-5 w-5 text-gold-foreground" />
           </span>
           <div className="min-w-0 leading-tight">
-            <div className="truncate font-display text-xl font-semibold">Nale-paar Masjid</div>
+            <div className="truncate font-display text-xl font-semibold">Masjid Nale-paar</div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Azan &amp; Timetable
             </div>
@@ -114,7 +114,7 @@ export function SiteFooter() {
     <footer className="border-t border-border/60 bg-muted/40">
       <div className="container mx-auto grid gap-8 px-4 py-12 md:grid-cols-3">
         <div>
-          <div className="font-display text-2xl">Nale-paar Masjid</div>
+          <div className="font-display text-2xl">Masjid Nale-paar</div>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             Serving the community with daily prayers, Jumuah, and education. Updated prayer times by
             the masjid administration.
@@ -123,9 +123,9 @@ export function SiteFooter() {
         <div>
           <div className="text-xs uppercase tracking-[0.2em] text-gold">Visit</div>
           <p className="mt-3 text-sm text-muted-foreground">
-            123 Crescent Lane
+            Naya Bazar, Kamptee, 441001
             <br />
-            City, Country
+            Nagpur, Maharashtra
           </p>
         </div>
         <div>
@@ -138,7 +138,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Nale-paar Masjid. All times subject to change.
+        © {new Date().getFullYear()} Masjid Nale-paar. All times subject to change.
       </div>
     </footer>
   );

@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nale-paar Masjid — Azan & Prayer Timetable" },
+      { title: "Masjid Nale-paar — Azan & Prayer Timetable" },
       {
         name: "description",
         content:
-          "Daily Azan, Jamaat times, monthly timetable, Jumuah, announcements and community events at Nale-paar Masjid.",
+          "Daily Azan, Jamaat times, monthly timetable, Jumuah, announcements and community events at Masjid Nale-paar.",
       },
-      { property: "og:title", content: "Nale-paar Masjid — Azan & Prayer Timetable" },
+      { property: "og:title", content: "Masjid Nale-paar — Azan & Prayer Timetable" },
       {
         property: "og:description",
         content:

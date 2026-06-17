@@ -18,11 +18,11 @@ import { SCHEDULE_DATE } from "@/lib/prayer";
 export const Route = createFileRoute("/_public/")({
   head: () => ({
     meta: [
-      { title: "Al-Noor Masjid — Azan & Prayer Timetable" },
+      { title: "Masjid Nale-paar — Azan & Prayer Timetable" },
       {
         name: "description",
         content:
-          "Daily Azan, Jamaat times, monthly prayer timetable, Jumuah and community events at Al-Noor Masjid.",
+          "Daily Azan, Jamaat times, monthly prayer timetable, Jumuah and community events at Masjid Nale-paar.",
       },
     ],
   }),
@@ -106,8 +106,8 @@ function HomePage() {
               <span className="text-gold">at its appointed time.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg text-primary-foreground/75">
-              Daily Azan and Jamaat times, monthly schedule and community announcements — kept
-              current by the masjid administration.
+              Daily Azan and Jamaat times and community announcements — kept current by the masjid
+              administration.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button
@@ -147,7 +147,7 @@ function HomePage() {
               </div>
               <div className="mt-3 flex items-baseline justify-between">
                 <div className="font-display text-6xl text-primary">{next?.name ?? "—"}</div>
-                <div className="font-display text-3xl text-gold">
+                <div className="font-display text-4xl text-gold">
                   {formatTime12(next?.jamaat ?? null)}
                 </div>
               </div>
@@ -169,7 +169,7 @@ function HomePage() {
               </div>
               {current && (
                 <div className="mt-4 flex items-center justify-between rounded-xl border border-border/60 px-4 py-3 text-sm">
-                  <span className="text-muted-foreground">Last prayer</span>
+                  <span className="text-muted-foreground">Now</span>
                   <span className="font-medium">
                     {current.name} · {formatTime12(current.jamaat)}
                   </span>

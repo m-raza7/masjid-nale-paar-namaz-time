@@ -7,7 +7,7 @@ import { formatTime12, todayISO } from "@/lib/prayer";
 export const Route = createFileRoute("/_public/events")({
   head: () => ({
     meta: [
-      { title: "Events — Nale-paar Masjid" },
+      { title: "Events — Masjid Nale-paar" },
       {
         name: "description",
         content: "Upcoming community events at the masjid: halaqas, iftars, lectures and more.",
