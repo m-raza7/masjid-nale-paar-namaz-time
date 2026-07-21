@@ -7,10 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import IntroImage from "../components/IntroImage";
 
 function NotFoundComponent() {
   return (
@@ -124,6 +125,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  const [showIntro, setShowIntro] = useState(true);
+
+  if (showIntro) {
+    return <IntroImage onFinish={() => setShowIntro(false)} />;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
