@@ -13,7 +13,9 @@ function Stat({ icon: Icon, label, value }: { icon: any; label: string; value: n
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
-        <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-gold text-gold-foreground"><Icon className="h-4 w-4" /></span>
+        <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-gold text-gold-foreground">
+          <Icon className="h-4 w-4" />
+        </span>
       </div>
       <div className="mt-3 font-display text-4xl text-primary">{value}</div>
     </div>
@@ -26,8 +28,14 @@ function Dashboard() {
     queryFn: async () => {
       const [pt, an, ev] = await Promise.all([
         supabase.from("prayer_times").select("id", { count: "exact", head: true }),
-        supabase.from("announcements").select("id", { count: "exact", head: true }).eq("active", true),
-        supabase.from("events").select("id", { count: "exact", head: true }).gte("event_date", todayISO()),
+        supabase
+          .from("announcements")
+          .select("id", { count: "exact", head: true })
+          .eq("active", true),
+        supabase
+          .from("events")
+          .select("id", { count: "exact", head: true })
+          .gte("event_date", todayISO()),
       ]);
       return { pt: pt.count ?? 0, an: an.count ?? 0, ev: ev.count ?? 0 };
     },

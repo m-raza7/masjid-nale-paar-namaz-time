@@ -113,7 +113,7 @@ CREATE TRIGGER trg_mosque_info_updated BEFORE UPDATE ON public.mosque_info
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 INSERT INTO public.mosque_info (name, address, phone, email, about)
-VALUES ('Masjid Nale-paar', '123 Crescent Lane, City', '+1 (555) 123-4567', 'info@alnoor.masjid',
+VALUES ('Masjid Nale-paar', '123 Crescent Lane, City', '+1 (555) 123-4567', 'info@nalepaar.masjid',
 'A community masjid serving the local Muslim community with daily prayers, Jumuah, education, and outreach.');
 
 -- Auto-grant admin role to the first user that signs up; subsequent users get 'user'

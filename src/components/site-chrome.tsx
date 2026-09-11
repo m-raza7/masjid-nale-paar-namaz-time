@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import logoImg from "../assets/nale-paar.jpeg";
 
 const nav: { to: string; label: string; external?: boolean }[] = [
   { to: "/", label: "Home" },
@@ -23,9 +24,14 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
         <Link to="/" className="flex min-w-0 items-center gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-gold shadow-gold">
+          {/* <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-gold shadow-gold">
             <Moon className="h-5 w-5 text-gold-foreground" />
-          </span>
+          </span> */}
+          <img
+            src={logoImg}
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full"
+            alt=""
+          />
           <div className="min-w-0 leading-tight">
             <div className="truncate font-display text-xl font-semibold">Masjid Nale-paar</div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -133,7 +139,7 @@ export function SiteFooter() {
           <p className="mt-3 text-sm text-muted-foreground">
             +1 (555) 123-4567
             <br />
-            info@alnoor.masjid
+            info@nalepaar.masjid
           </p>
         </div>
       </div>

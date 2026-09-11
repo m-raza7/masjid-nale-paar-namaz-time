@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import logoImg from "../assets/nale-paar.jpeg";
 
 export const Route = createFileRoute("/_admin")({
   component: AdminLayout,
@@ -63,9 +64,12 @@ function AdminLayout() {
       >
         <div className="flex h-16 justify-between items-center gap-3 border-b border-sidebar-border px-6">
           <div className="flex gap-3 items-center">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-gold text-gold-foreground">
+            {/* <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-gold text-gold-foreground">
               ★
-            </span>
+              </span> */}
+            <Link to="/" className="flex items-center gap-3">
+              <img src={logoImg} className="grid h-9 w-9 place-items-center rounded-full " alt="" />
+            </Link>
             <div className="font-display text-lg">Admin</div>
           </div>
           <button

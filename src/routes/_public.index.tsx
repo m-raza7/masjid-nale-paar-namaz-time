@@ -34,7 +34,7 @@ const rakaatData = [
     bg: "bg-sky-50",
     before: 2,
     beforeLabel: "Sunnat Mu'akkadah",
-    fard: 2,
+    Farz: 2,
     after: "-",
     afterLabel: "",
     nafl: "-",
@@ -50,7 +50,7 @@ const rakaatData = [
     bg: "bg-green-50",
     before: 4,
     beforeLabel: "Sunnat Mu'akkadah",
-    fard: 4,
+    Farz: 4,
     after: 2,
     afterLabel: "Sunnat Mu'akkadah",
     nafl: 2,
@@ -66,7 +66,7 @@ const rakaatData = [
     bg: "bg-orange-50",
     before: 4,
     beforeLabel: "",
-    fard: 4,
+    Farz: 4,
     after: "-",
     afterLabel: "",
     nafl: "-",
@@ -82,7 +82,7 @@ const rakaatData = [
     bg: "bg-pink-50",
     before: "-",
     beforeLabel: "",
-    fard: 3,
+    Farz: 3,
     after: 2,
     afterLabel: "Sunnat Mu'akkadah",
     nafl: 2,
@@ -98,7 +98,7 @@ const rakaatData = [
     bg: "bg-purple-50",
     before: 4,
     beforeLabel: "",
-    fard: 4,
+    Farz: 4,
     after: 2,
     afterLabel: "Sunnat Mu'akkadah",
     nafl: 2,
@@ -114,7 +114,7 @@ const rakaatData = [
     bg: "bg-emerald-50",
     before: 4,
     beforeLabel: "Sunnat Mu'akkadah",
-    fard: 2,
+    Farz: 2,
     after: 4,
     afterLabel: "Sunnat Mu'akkadah",
     nafl: 2,
@@ -288,6 +288,7 @@ function HomePage() {
           </div>
         </div>
       </section>
+
       {/* Today's timetable */}
       <section className="container mx-auto px-4 py-20">
         <div className="flex items-end justify-between gap-4">
@@ -382,9 +383,9 @@ function HomePage() {
                     <div className="text-[10px] uppercase tracking-wider opacity-80">Before</div>
                   </th>
 
-                  {/* Fard */}
+                  {/* Farz */}
                   <th className="w-[14%] bg-blue-600 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Fard</div>
+                    <div className="text-sm font-bold uppercase">Farz</div>
 
                     <div className="text-[10px] uppercase tracking-wider opacity-80">
                       Obligatory
@@ -478,14 +479,14 @@ function HomePage() {
                         )}
                       </td>
 
-                      {/* ================= FARD ================= */}
+                      {/* ================= Farz ================= */}
                       <td className="bg-blue-50/60 px-4 py-5 text-center dark:bg-blue-950/20">
                         <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
-                          {prayer.fard}
+                          {prayer.Farz}
                         </div>
 
                         <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                          Fard
+                          Farz
                         </div>
                       </td>
 
@@ -571,7 +572,21 @@ function HomePage() {
 
         {/* ================= BOTTOM INFORMATION CARDS ================= */}
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {/* About */}
+          {/* Prayer Times */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
+              <Clock className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+            </div>
+
+            <h3 className="font-display text-xl text-primary">Prayer Times</h3>
+
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Stay updated with today's Salah timings and easily keep track of the next prayer
+              throughout the day.
+            </p>
+          </div>
+
+          {/* Salah */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
               <Sparkles className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
@@ -580,35 +595,22 @@ function HomePage() {
             <h3 className="font-display text-xl text-primary">About Salah</h3>
 
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Salah is one of the most important acts of worship. Performing the five daily prayers
-              regularly helps us stay connected with Allah.
+              Salah is one of the most important acts of worship in Islam. Performing the five daily
+              prayers helps us stay connected with Allah.
             </p>
           </div>
 
-          {/* Benefits */}
+          {/* Masjid Reminder */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
-              <Sparkles className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+              <Calendar className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
             </div>
 
-            <h3 className="font-display text-xl text-primary">Benefits</h3>
+            <h3 className="font-display text-xl text-primary">Stay Connected</h3>
 
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Salah brings peace to the heart and reminds us to maintain discipline and remembrance
-              throughout the day.
-            </p>
-          </div>
-
-          {/* Reminder */}
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
-              <Clock className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-            </div>
-
-            <h3 className="font-display text-xl text-primary">Reminder</h3>
-
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              "Indeed, prayer has been decreed upon the believers at specified times."
+              Keep up with Masjid announcements, Islamic events, and important community updates in
+              one place.
             </p>
           </div>
         </div>
