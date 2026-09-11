@@ -366,8 +366,8 @@ function HomePage() {
         {/* Raka'at Table */}
         <div className="overflow-hidden rounded-3xl border border-gold/20 bg-card shadow-elegant">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[850px] border-collapse">
-              {/* Table Header */}
+            <table className="w-full min-w-[1050px] border-collapse">
+              {/* ================= TABLE HEADER ================= */}
               <thead>
                 <tr className="text-primary-foreground">
                   {/* Prayer */}
@@ -383,7 +383,7 @@ function HomePage() {
                   </th>
 
                   {/* Fard */}
-                  <th className="w-[12%] bg-blue-600 px-4 py-5 text-center">
+                  <th className="w-[14%] bg-blue-600 px-4 py-5 text-center">
                     <div className="text-sm font-bold uppercase">Fard</div>
 
                     <div className="text-[10px] uppercase tracking-wider opacity-80">
@@ -408,7 +408,7 @@ function HomePage() {
                   </th>
 
                   {/* Witr */}
-                  <th className="w-[11%] bg-amber-700 px-4 py-5 text-center">
+                  <th className="w-[10%] bg-amber-700 px-4 py-5 text-center">
                     <div className="text-sm font-bold uppercase">Witr</div>
 
                     <div className="text-[10px] uppercase tracking-wider opacity-80">Wajib</div>
@@ -424,7 +424,7 @@ function HomePage() {
                   </th>
 
                   {/* Total */}
-                  <th className="w-[11%] bg-emerald-800 px-4 py-5 text-center">
+                  <th className="w-[10%] bg-emerald-800 px-4 py-5 text-center">
                     <div className="text-sm font-bold uppercase">Total</div>
 
                     <div className="text-[10px] uppercase tracking-wider opacity-80">Raka'at</div>
@@ -446,7 +446,7 @@ function HomePage() {
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-4">
                           <div
-                            className={`flex h-12 w-12 items-center justify-center rounded-full ${prayer.bg}`}
+                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${prayer.bg}`}
                           >
                             <Icon className={`h-6 w-6 ${prayer.color}`} />
                           </div>
@@ -465,36 +465,42 @@ function HomePage() {
                       <td className="px-4 py-5 text-center">
                         <div
                           className={`text-2xl font-bold ${
-                            prayer.before === "-" ? "text-muted-foreground" : ""
+                            prayer.before === "-" ? "text-muted-foreground" : "text-foreground"
                           }`}
                         >
                           {prayer.before}
                         </div>
 
                         {prayer.before !== "-" && prayer.beforeLabel && (
-                          <div className="text-[10px] text-muted-foreground">
+                          <div className="mt-1 text-[10px] text-muted-foreground">
                             {prayer.beforeLabel}
                           </div>
                         )}
                       </td>
 
                       {/* ================= FARD ================= */}
-                      <td className="bg-blue-50/60 px-4 py-5 text-center">
-                        <div className="text-2xl font-bold text-blue-600">{prayer.fard}</div>
+                      <td className="bg-blue-50/60 px-4 py-5 text-center dark:bg-blue-950/20">
+                        <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
+                          {prayer.fard}
+                        </div>
+
+                        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                          Fard
+                        </div>
                       </td>
 
                       {/* ================= SUNNAT AFTER ================= */}
                       <td className="px-4 py-5 text-center">
                         <div
                           className={`text-2xl font-bold ${
-                            prayer.after === "-" ? "text-muted-foreground" : ""
+                            prayer.after === "-" ? "text-muted-foreground" : "text-foreground"
                           }`}
                         >
                           {prayer.after}
                         </div>
 
                         {prayer.after !== "-" && prayer.afterLabel && (
-                          <div className="text-[10px] text-muted-foreground">
+                          <div className="mt-1 text-[10px] text-muted-foreground">
                             {prayer.afterLabel}
                           </div>
                         )}
@@ -504,15 +510,15 @@ function HomePage() {
                       <td className="px-4 py-5 text-center">
                         <div
                           className={`text-2xl font-bold ${
-                            prayer.nafl === "-" ? "text-muted-foreground" : ""
+                            prayer.nafl === "-" ? "text-muted-foreground" : "text-foreground"
                           }`}
                         >
                           {prayer.nafl}
                         </div>
 
-                        {prayer.nafl !== "-" && (
-                          <div className="text-[10px] text-muted-foreground">
-                            {prayer.naflLabel || ""}
+                        {prayer.nafl !== "-" && prayer.naflLabel && (
+                          <div className="mt-1 text-[10px] text-muted-foreground">
+                            {prayer.naflLabel}
                           </div>
                         )}
                       </td>
@@ -521,14 +527,14 @@ function HomePage() {
                       <td className="px-4 py-5 text-center">
                         <div
                           className={`text-2xl font-bold ${
-                            prayer.witr === "-" ? "text-muted-foreground" : "text-amber-700"
+                            prayer.witr === "-" ? "text-muted-foreground" : "text-gold"
                           }`}
                         >
                           {prayer.witr}
                         </div>
 
                         {prayer.witr !== "-" && (
-                          <div className="text-[10px] text-muted-foreground">Wajib</div>
+                          <div className="mt-1 text-[10px] text-muted-foreground">Wajib</div>
                         )}
                       </td>
 
@@ -536,20 +542,22 @@ function HomePage() {
                       <td className="px-4 py-5 text-center">
                         <div
                           className={`text-2xl font-bold ${
-                            prayer.naflAfter === "-" ? "text-muted-foreground" : ""
+                            prayer.naflAfter === "-" ? "text-muted-foreground" : "text-foreground"
                           }`}
                         >
                           {prayer.naflAfter}
                         </div>
 
                         {prayer.naflAfter !== "-" && (
-                          <div className="text-[10px] text-muted-foreground">Nafl</div>
+                          <div className="mt-1 text-[10px] text-muted-foreground">Nafl</div>
                         )}
                       </td>
 
                       {/* ================= TOTAL ================= */}
-                      <td className="bg-emerald-50/70 px-4 py-5 text-center">
-                        <div className="font-display text-3xl text-primary">{prayer.total}</div>
+                      <td className="bg-emerald-50/70 px-4 py-5 text-center dark:bg-emerald-950/20">
+                        <div className="font-display text-3xl font-bold text-primary">
+                          {prayer.total}
+                        </div>
 
                         <div className="text-[10px] text-muted-foreground">Raka'at</div>
                       </td>
@@ -565,8 +573,8 @@ function HomePage() {
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {/* About */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50">
-              <Sparkles className="h-5 w-5 text-emerald-700" />
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
+              <Sparkles className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
             </div>
 
             <h3 className="font-display text-xl text-primary">About Salah</h3>
@@ -579,8 +587,8 @@ function HomePage() {
 
           {/* Benefits */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50">
-              <Sparkles className="h-5 w-5 text-emerald-700" />
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
+              <Sparkles className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
             </div>
 
             <h3 className="font-display text-xl text-primary">Benefits</h3>
@@ -593,8 +601,8 @@ function HomePage() {
 
           {/* Reminder */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50">
-              <Clock className="h-5 w-5 text-emerald-700" />
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
+              <Clock className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
             </div>
 
             <h3 className="font-display text-xl text-primary">Reminder</h3>
@@ -605,8 +613,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Announcements + Events */}
 
       {/* Announcements + Events */}
       <section className="border-y border-border/60 bg-muted/30 py-20">
