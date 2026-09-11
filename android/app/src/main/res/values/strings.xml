@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">prayerTime</string>
-    <string name="title_activity_main">prayerTime</string>
+    <string name="app_name">Masjid Nale-paar</string>
+    <string name="title_activity_main">Nale Paar</string>
     <string name="package_name">com.masjidnalepaar.prayerTime</string>
     <string name="custom_url_scheme">com.masjidnalepaar.prayerTime</string>
 </resources>

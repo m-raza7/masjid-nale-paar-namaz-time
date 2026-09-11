@@ -1,7 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, Calendar, Clock, MapPin, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  MapPin,
+  Sparkles,
+  Sunrise,
+  Sun,
+  Sunset,
+  Moon,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   currentAndNextPrayer,
@@ -15,6 +25,105 @@ import {
 import { Button } from "@/components/ui/button";
 import { SCHEDULE_DATE } from "@/lib/prayer";
 
+const rakaatData = [
+  {
+    name: "Fajr",
+    subtitle: "Dawn",
+    icon: Sunrise,
+    color: "text-sky-700",
+    bg: "bg-sky-50",
+    before: 2,
+    beforeLabel: "Sunnat Mu'akkadah",
+    fard: 2,
+    after: "-",
+    afterLabel: "",
+    nafl: "-",
+    witr: "-",
+    naflAfter: "-",
+    total: 4,
+  },
+  {
+    name: "Dhuhr",
+    subtitle: "Noon",
+    icon: Sun,
+    color: "text-green-700",
+    bg: "bg-green-50",
+    before: 4,
+    beforeLabel: "Sunnat Mu'akkadah",
+    fard: 4,
+    after: 2,
+    afterLabel: "Sunnat Mu'akkadah",
+    nafl: 2,
+    witr: "-",
+    naflAfter: "-",
+    total: 12,
+  },
+  {
+    name: "Asr",
+    subtitle: "Afternoon",
+    icon: Sun,
+    color: "text-orange-600",
+    bg: "bg-orange-50",
+    before: 4,
+    beforeLabel: "",
+    fard: 4,
+    after: "-",
+    afterLabel: "",
+    nafl: "-",
+    witr: "-",
+    naflAfter: "-",
+    total: 8,
+  },
+  {
+    name: "Maghrib",
+    subtitle: "After Sunset",
+    icon: Sunset,
+    color: "text-pink-700",
+    bg: "bg-pink-50",
+    before: "-",
+    beforeLabel: "",
+    fard: 3,
+    after: 2,
+    afterLabel: "Sunnat Mu'akkadah",
+    nafl: 2,
+    witr: "-",
+    naflAfter: "-",
+    total: 7,
+  },
+  {
+    name: "Isha",
+    subtitle: "Night",
+    icon: Moon,
+    color: "text-purple-700",
+    bg: "bg-purple-50",
+    before: 4,
+    beforeLabel: "",
+    fard: 4,
+    after: 2,
+    afterLabel: "Sunnat Mu'akkadah",
+    nafl: 2,
+    witr: 3,
+    naflAfter: 2,
+    total: 17,
+  },
+  {
+    name: "Juma",
+    subtitle: "Friday",
+    icon: Calendar,
+    color: "text-emerald-700",
+    bg: "bg-emerald-50",
+    before: 4,
+    beforeLabel: "Sunnat Mu'akkadah",
+    fard: 2,
+    after: 4,
+    afterLabel: "Sunnat Mu'akkadah",
+    nafl: 2,
+    naflLabel: "Sunnat",
+    witr: "-",
+    naflAfter: 2,
+    total: 14,
+  },
+];
 export const Route = createFileRoute("/_public/")({
   head: () => ({
     meta: [
@@ -179,7 +288,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Today's timetable */}
       <section className="container mx-auto px-4 py-20">
         <div className="flex items-end justify-between gap-4">
@@ -224,6 +332,281 @@ function HomePage() {
           )}
         </div>
       </section>
+
+      {/* ================= RAKA'AT SECTION ================= */}
+      <section className="container mx-auto px-4 pb-20">
+        {/* Header */}
+        <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-gold">
+              <Sparkles className="h-4 w-4" />
+              Daily Salah
+            </div>
+
+            <h2 className="mt-2 font-display text-4xl text-primary md:text-5xl">5 Daily Prayers</h2>
+
+            <p className="mt-2 text-sm text-muted-foreground md:text-base">
+              Raka'at (Units) in Each Prayer
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 rounded-2xl border border-gold/20 bg-card px-5 py-4 shadow-sm">
+            <Clock className="h-6 w-6 text-gold" />
+
+            <div>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                Daily Reminder
+              </p>
+
+              <p className="font-medium text-primary">Salah is the key to Jannah</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Raka'at Table */}
+        <div className="overflow-hidden rounded-3xl border border-gold/20 bg-card shadow-elegant">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[850px] border-collapse">
+              {/* Table Header */}
+              <thead>
+                <tr className="text-primary-foreground">
+                  {/* Prayer */}
+                  <th className="w-[20%] bg-primary px-6 py-5 text-left">
+                    <div className="text-sm font-bold uppercase tracking-wide">Prayer</div>
+                  </th>
+
+                  {/* Sunnat Before */}
+                  <th className="w-[12%] bg-emerald-700 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Sunnat</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">Before</div>
+                  </th>
+
+                  {/* Fard */}
+                  <th className="w-[12%] bg-blue-600 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Fard</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">
+                      Obligatory
+                    </div>
+                  </th>
+
+                  {/* Sunnat After */}
+                  <th className="w-[12%] bg-orange-600 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Sunnat</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">After</div>
+                  </th>
+
+                  {/* Nafl */}
+                  <th className="w-[11%] bg-purple-700 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Nafl</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">
+                      Recommended
+                    </div>
+                  </th>
+
+                  {/* Witr */}
+                  <th className="w-[11%] bg-amber-700 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Witr</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">Wajib</div>
+                  </th>
+
+                  {/* Nafl After */}
+                  <th className="w-[11%] bg-purple-700 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Nafl</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">
+                      Recommended
+                    </div>
+                  </th>
+
+                  {/* Total */}
+                  <th className="w-[11%] bg-emerald-800 px-4 py-5 text-center">
+                    <div className="text-sm font-bold uppercase">Total</div>
+
+                    <div className="text-[10px] uppercase tracking-wider opacity-80">Raka'at</div>
+                  </th>
+                </tr>
+              </thead>
+
+              {/* ================= DYNAMIC TABLE BODY ================= */}
+              <tbody>
+                {rakaatData.map((prayer) => {
+                  const Icon = prayer.icon;
+
+                  return (
+                    <tr
+                      key={prayer.name}
+                      className="border-b border-border/60 transition-colors hover:bg-muted/30 last:border-b-0"
+                    >
+                      {/* ================= PRAYER ================= */}
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`flex h-12 w-12 items-center justify-center rounded-full ${prayer.bg}`}
+                          >
+                            <Icon className={`h-6 w-6 ${prayer.color}`} />
+                          </div>
+
+                          <div>
+                            <div className={`font-display text-xl ${prayer.color}`}>
+                              {prayer.name}
+                            </div>
+
+                            <div className="text-xs text-muted-foreground">{prayer.subtitle}</div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* ================= SUNNAT BEFORE ================= */}
+                      <td className="px-4 py-5 text-center">
+                        <div
+                          className={`text-2xl font-bold ${
+                            prayer.before === "-" ? "text-muted-foreground" : ""
+                          }`}
+                        >
+                          {prayer.before}
+                        </div>
+
+                        {prayer.before !== "-" && prayer.beforeLabel && (
+                          <div className="text-[10px] text-muted-foreground">
+                            {prayer.beforeLabel}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* ================= FARD ================= */}
+                      <td className="bg-blue-50/60 px-4 py-5 text-center">
+                        <div className="text-2xl font-bold text-blue-600">{prayer.fard}</div>
+                      </td>
+
+                      {/* ================= SUNNAT AFTER ================= */}
+                      <td className="px-4 py-5 text-center">
+                        <div
+                          className={`text-2xl font-bold ${
+                            prayer.after === "-" ? "text-muted-foreground" : ""
+                          }`}
+                        >
+                          {prayer.after}
+                        </div>
+
+                        {prayer.after !== "-" && prayer.afterLabel && (
+                          <div className="text-[10px] text-muted-foreground">
+                            {prayer.afterLabel}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* ================= NAFL ================= */}
+                      <td className="px-4 py-5 text-center">
+                        <div
+                          className={`text-2xl font-bold ${
+                            prayer.nafl === "-" ? "text-muted-foreground" : ""
+                          }`}
+                        >
+                          {prayer.nafl}
+                        </div>
+
+                        {prayer.nafl !== "-" && (
+                          <div className="text-[10px] text-muted-foreground">
+                            {prayer.naflLabel || ""}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* ================= WITR ================= */}
+                      <td className="px-4 py-5 text-center">
+                        <div
+                          className={`text-2xl font-bold ${
+                            prayer.witr === "-" ? "text-muted-foreground" : "text-amber-700"
+                          }`}
+                        >
+                          {prayer.witr}
+                        </div>
+
+                        {prayer.witr !== "-" && (
+                          <div className="text-[10px] text-muted-foreground">Wajib</div>
+                        )}
+                      </td>
+
+                      {/* ================= NAFL AFTER ================= */}
+                      <td className="px-4 py-5 text-center">
+                        <div
+                          className={`text-2xl font-bold ${
+                            prayer.naflAfter === "-" ? "text-muted-foreground" : ""
+                          }`}
+                        >
+                          {prayer.naflAfter}
+                        </div>
+
+                        {prayer.naflAfter !== "-" && (
+                          <div className="text-[10px] text-muted-foreground">Nafl</div>
+                        )}
+                      </td>
+
+                      {/* ================= TOTAL ================= */}
+                      <td className="bg-emerald-50/70 px-4 py-5 text-center">
+                        <div className="font-display text-3xl text-primary">{prayer.total}</div>
+
+                        <div className="text-[10px] text-muted-foreground">Raka'at</div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ================= BOTTOM INFORMATION CARDS ================= */}
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {/* About */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50">
+              <Sparkles className="h-5 w-5 text-emerald-700" />
+            </div>
+
+            <h3 className="font-display text-xl text-primary">About Salah</h3>
+
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Salah is one of the most important acts of worship. Performing the five daily prayers
+              regularly helps us stay connected with Allah.
+            </p>
+          </div>
+
+          {/* Benefits */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50">
+              <Sparkles className="h-5 w-5 text-emerald-700" />
+            </div>
+
+            <h3 className="font-display text-xl text-primary">Benefits</h3>
+
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Salah brings peace to the heart and reminds us to maintain discipline and remembrance
+              throughout the day.
+            </p>
+          </div>
+
+          {/* Reminder */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50">
+              <Clock className="h-5 w-5 text-emerald-700" />
+            </div>
+
+            <h3 className="font-display text-xl text-primary">Reminder</h3>
+
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              "Indeed, prayer has been decreed upon the believers at specified times."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Announcements + Events */}
 
       {/* Announcements + Events */}
       <section className="border-y border-border/60 bg-muted/30 py-20">
