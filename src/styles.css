@@ -202,3 +202,90 @@
   );
   background-size: 24px 24px;
 }
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================================
+   PRAYER CARD - MOVING GOLDEN BORDER
+   ========================================= */
+
+.prayer-border-light {
+  position: absolute;
+
+  width: 150%;
+  height: 150%;
+
+  left: -25%;
+  top: -25%;
+
+  pointer-events: none;
+
+  background: conic-gradient(
+    from 0deg,
+
+    transparent 0deg,
+    transparent 320deg,
+
+    rgba(245, 158, 11, 0.05) 330deg,
+    rgba(245, 158, 11, 0.35) 340deg,
+
+    #f59e0b 346deg,
+    #facc15 350deg,
+    #fff8c5 353deg,
+    #facc15 356deg,
+
+    rgba(245, 158, 11, 0.35) 359deg,
+    transparent 360deg
+  );
+
+  filter: drop-shadow(0 0 3px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 8px rgba(245, 158, 11, 0.5))
+    drop-shadow(0 0 16px rgba(245, 158, 11, 0.25));
+}
+
+/* First golden light */
+.prayer-border-light-1 {
+  animation: prayerBorderRotate1 5s linear infinite;
+}
+
+/* Second golden light
+   Starts exactly opposite */
+.prayer-border-light-2 {
+  animation: prayerBorderRotate2 5s linear infinite;
+}
+
+/* =========================================
+   CLOCKWISE ROTATION
+   ========================================= */
+
+@keyframes prayerBorderRotate1 {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes prayerBorderRotate2 {
+  from {
+    transform: rotate(180deg);
+  }
+
+  to {
+    transform: rotate(540deg);
+  }
+}

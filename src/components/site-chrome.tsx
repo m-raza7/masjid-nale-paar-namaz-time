@@ -20,25 +20,29 @@ const nav: { to: string; label: string; external?: boolean }[] = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
-        <Link to="/" className="flex min-w-0 items-center gap-3">
-          {/* <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-gold shadow-gold">
-            <Moon className="h-5 w-5 text-gold-foreground" />
-          </span> */}
+        <div className="flex min-w-0 items-center gap-3">
+          {/* PROFILE IMAGE */}
           <img
             src={logoImg}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full"
-            alt=""
+            onClick={() => setShowProfile(true)}
+            className="grid h-10 w-10 shrink-0 cursor-pointer place-items-center rounded-full object-cover transition-transform hover:scale-105"
+            alt="Masjid Nale-paar"
           />
-          <div className="min-w-0 leading-tight">
-            <div className="truncate font-display text-xl font-semibold">Masjid Nale-paar</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Azan &amp; Timetable
+
+          <Link to="/">
+            <div className="min-w-0 leading-tight">
+              <div className="truncate font-display text-xl font-semibold">Masjid Nale-paar</div>
+
+              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                Azan &amp; Timetable
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
 
         <nav className="hidden items-center gap-1 md:flex">
           {nav.map((n) =>
@@ -65,26 +69,24 @@ export function SiteHeader() {
             ),
           )}
         </nav>
-        {/* <a
-            href="https://madarsa-nale-paar.vercel.app/"
-            className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            Madarsa - Nale Paar
-          </a> */}
+
         <div className="flex items-center gap-2">
           <ThemeToggle />
+
           <Link
             to="/admin/login"
             className="hidden rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex"
           >
             Admin
           </Link>
+
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
+
             <SheetContent side="right" className="w-72">
               <div className="mt-8 flex flex-col gap-1">
                 {nav.map((n) => (
@@ -99,6 +101,7 @@ export function SiteHeader() {
                     {n.label}
                   </Link>
                 ))}
+
                 <Link
                   to="/admin/login"
                   onClick={() => setOpen(false)}
@@ -111,6 +114,24 @@ export function SiteHeader() {
           </Sheet>
         </div>
       </div>
+
+      {/* ================================================= */}
+      {/* FULL SCREEN PROFILE IMAGE PREVIEW                */}
+      {/* ================================================= */}
+
+      {showProfile && (
+        <div
+          className="fixed inset-0 z-[999999] flex min-h-screen w-screen items-center justify-center bg-black/90 p-4"
+          onClick={() => setShowProfile(false)}
+        >
+          <img
+            src={logoImg}
+            alt="Masjid Nale-paar"
+            className="max-h-[90vh] max-w-[90vw] rounded-full object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </header>
   );
 }

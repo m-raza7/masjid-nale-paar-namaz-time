@@ -25,6 +25,25 @@ import {
 import { Button } from "@/components/ui/button";
 import { SCHEDULE_DATE } from "@/lib/prayer";
 
+const hadiths = [
+  {
+    text: "The prayer is the first matter that a person will be questioned about on the Day of Judgment.",
+    theme: "gold",
+  },
+  {
+    text: "Prayer is the light of the believer.",
+    theme: "green",
+  },
+  {
+    text: "The closest a servant is to his Lord is while he is prostrating.",
+    theme: "gold",
+  },
+  {
+    text: "Whoever establishes prayer establishes his faith.",
+    theme: "green",
+  },
+];
+
 const rakaatData = [
   {
     name: "Fajr",
@@ -203,21 +222,79 @@ function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-hero text-primary-foreground">
+        {/* ================= HADITH MARQUEE ================= */}
+        <div className="relative z-20 w-full overflow-hidden border-b border-gold/20 bg-black/10 py-3">
+          <div className="marquee-track flex w-max">
+            {/* FIRST SET */}
+            {hadiths.map((hadith, index) => (
+              <div key={`first-${index}`} className="flex shrink-0 items-center whitespace-nowrap">
+                <span
+                  className={`mx-8 text-sm font-medium ${
+                    hadith.theme === "gold" ? "text-gold" : "text-primary-foreground/90"
+                  }`}
+                >
+                  ✦
+                </span>
+
+                <span className="text-sm text-primary-foreground/90">{hadith.text}</span>
+
+                <span
+                  className={`mx-8 text-sm ${
+                    hadith.theme === "gold" ? "text-gold" : "text-primary-foreground/60"
+                  }`}
+                >
+                  ✦
+                </span>
+              </div>
+            ))}
+
+            {/* SECOND SET - REQUIRED FOR INFINITE LOOP */}
+            {hadiths.map((hadith, index) => (
+              <div key={`second-${index}`} className="flex shrink-0 items-center whitespace-nowrap">
+                <span
+                  className={`mx-8 text-sm font-medium ${
+                    hadith.theme === "gold" ? "text-gold" : "text-primary-foreground/90"
+                  }`}
+                >
+                  ✦
+                </span>
+
+                <span className="text-sm text-primary-foreground/90">{hadith.text}</span>
+
+                <span
+                  className={`mx-8 text-sm ${
+                    hadith.theme === "gold" ? "text-gold" : "text-primary-foreground/60"
+                  }`}
+                >
+                  ✦
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* BACKGROUND */}
         <div className="arabesque absolute inset-0 opacity-20" />
-        <div className="container relative mx-auto grid gap-12 px-4 py-20 md:grid-cols-2 md:py-28">
+
+        {/* YOUR EXISTING CONTENT */}
+        <div className="container relative mx-auto grid gap-12 px-4 py-10 md:grid-cols-2 md:py-28">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-gold">
-              <Sparkles className="h-3 w-3" /> {getHijriDate()}
+              <Sparkles className="h-3 w-3" />
+              {getHijriDate()}
             </div>
+
             <h1 className="mt-6 font-display text-5xl leading-[1.05] md:text-7xl">
               Stand for prayer
               <br />
               <span className="text-gold">at its appointed time.</span>
             </h1>
+
             <p className="mt-6 max-w-lg text-lg text-primary-foreground/75">
               Daily Azan and Jamaat times and community announcements — kept current by the masjid
               administration.
             </p>
+
             <div className="mt-8 flex flex-wrap gap-3">
               <Button
                 asChild
@@ -225,9 +302,11 @@ function HomePage() {
                 className="bg-gradient-gold text-gold-foreground shadow-gold hover:opacity-95"
               >
                 <Link to="/prayer-times">
-                  View prayer times <ArrowRight className="ml-2 h-4 w-4" />
+                  View prayer times
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+
               <Button
                 asChild
                 size="lg"
@@ -239,13 +318,34 @@ function HomePage() {
             </div>
           </div>
 
-          {/* Next-prayer card */}
-          <div className="relative">
-            <div className="rounded-3xl border border-gold/20 bg-card/95 p-8 text-card-foreground shadow-elegant backdrop-blur">
+          {/* NEXT PRAYER CARD */}
+          <div className="relative overflow-hidden rounded-3xl p-[1.5px]">
+            {/* Moving golden light - 1 */}
+            <div className="prayer-border-light prayer-border-light-1" />
+
+            {/* Moving golden light - 2 */}
+            <div className="prayer-border-light prayer-border-light-2" />
+
+            {/* Main Card */}
+            <div
+              className="
+    relative
+    z-10
+    rounded-[22px]
+    border
+    border-gold/20
+    bg-card/95
+    p-8
+    text-card-foreground
+    shadow-elegant
+    backdrop-blur
+  "
+            >
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Next Prayer
                 </div>
+
                 <div className="text-xs font-bold tracking-wide text-muted-foreground">
                   {now.toLocaleString(undefined, {
                     weekday: "long",
@@ -254,31 +354,52 @@ function HomePage() {
                   })}
                 </div>
               </div>
+
               <div className="mt-3 flex items-baseline justify-between">
                 <div className="font-display text-6xl text-primary">{next?.name ?? "—"}</div>
+
                 <div className="font-display text-4xl text-gold">
                   {formatTime12(next?.jamaat ?? null)}
                 </div>
               </div>
+
               <div className="mt-6 rounded-2xl bg-muted/60 p-6 text-center">
                 <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Current Time
                 </div>
+
                 <div className="mt-2 font-display text-4xl tabular-nums text-primary">
                   {now.toLocaleTimeString(undefined, {
                     hour12: true,
                   })}
                 </div>
+
                 <div className="mt-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   Time remaining
                 </div>
+
                 <div className="mt-1 font-display text-5xl tabular-nums text-gold">
                   {formatCountdown(msToNext)}
                 </div>
               </div>
+
               {current && (
-                <div className="mt-4 flex items-center justify-between rounded-xl border border-border/60 px-4 py-3 text-sm">
+                <div
+                  className="
+        mt-4
+        flex
+        items-center
+        justify-between
+        rounded-xl
+        border
+        border-border/60
+        px-4
+        py-3
+        text-sm
+      "
+                >
                   <span className="text-muted-foreground">Now</span>
+
                   <span className="font-medium">
                     {current.name} · {formatTime12(current.jamaat)}
                   </span>
