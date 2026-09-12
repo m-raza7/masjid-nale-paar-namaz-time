@@ -453,7 +453,7 @@ function HomePage() {
                           </div>
 
                           <div>
-                            <div className={`font-display text-xl ${prayer.color}`}>
+                            <div className={`font-display text-xl font-bold ${prayer.color}`}>
                               {prayer.name}
                             </div>
 
