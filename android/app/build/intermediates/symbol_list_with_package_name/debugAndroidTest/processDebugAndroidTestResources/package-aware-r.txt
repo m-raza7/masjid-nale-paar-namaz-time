@@ -1,0 +1,3 @@
+com.masjidnalepaar.prayerTime.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme
