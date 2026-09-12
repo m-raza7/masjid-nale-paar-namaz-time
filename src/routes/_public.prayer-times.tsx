@@ -100,7 +100,7 @@ function PrayerTimesPage() {
                     {next?.name ?? "—"}
                   </div>
 
-                  <div className="shrink-0 whitespace-nowrap font-display text-2xl text-gold sm:text-3xl md:text-4xl">
+                  <div className="shrink-0 whitespace-nowrap font-display text-2xl text-gold sm:text-6xl md:text-4xl">
                     {formatTime12(next?.azan ?? null)}
                   </div>
                 </div>

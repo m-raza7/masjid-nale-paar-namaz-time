@@ -18,7 +18,7 @@ const IntroImage = ({ onFinish }: IntroImageProps) => {
     const timer = setTimeout(() => {
       sessionStorage.setItem("introShown", "true");
       onFinish();
-    }, 4000); // 4 seconds
+    }, 2500); // 4 seconds
 
     return () => clearTimeout(timer);
   }, [onFinish]);
