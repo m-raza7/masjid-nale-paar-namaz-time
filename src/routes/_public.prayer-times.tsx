@@ -120,7 +120,7 @@ function PrayerTimesPage() {
         {/* ================= PRAYER TIMES SECTION ================= */}
 
         {/* <section className="relative overflow-hidden bg-[#faf9f3] py-8 sm:py-10 md:py-14 lg:py-16 dark:bg-background"> */}
-        <div className="container relative mx-auto w-full px-3 sm:px-4 md:px-6 py-8 sm:py-10 md:py-14 lg:py-16">
+        <div className="container relative mx-auto w-full lg:px-3 sm:px-1 md:px-6 py-8 sm:py-10 md:py-14 lg:py-16">
           {/* Green Background Area */}
           <div className="relative overflow-hidden rounded-2xl bg-[#003d2b] px-4 py-10 shadow-elegant sm:rounded-3xl sm:px-6 sm:py-12 md:px-8 md:py-14 lg:px-10 lg:py-16 dark:bg-gradient-hero">
             {/* Decorative Background */}
