@@ -150,7 +150,9 @@ export function SiteFooter() {
         <div>
           <div className="text-xs uppercase tracking-[0.2em] text-gold">Visit</div>
           <p className="mt-3 text-sm text-muted-foreground">
-            Naya Bazar, Kamptee, 441001
+            Masjid Nale Paar, Cantonment Area,
+            <br />
+            Naya Bazar, Kamptee, 441001,
             <br />
             Nagpur, Maharashtra
           </p>
