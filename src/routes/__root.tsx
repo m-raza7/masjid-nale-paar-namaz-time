@@ -210,6 +210,7 @@ function RootComponent() {
     setupBackButton();
 
     return () => {
+      Q;
       backButtonListener?.remove();
     };
   }, [router]);

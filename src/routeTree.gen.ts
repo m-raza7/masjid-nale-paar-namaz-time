@@ -15,10 +15,12 @@ import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as PublicPrayerTimesRouteImport } from './routes/_public.prayer-times'
 import { Route as PublicMonthlyTimetableRouteImport } from './routes/_public.monthly-timetable'
+import { Route as PublicGalleryRouteImport } from './routes/_public.gallery'
 import { Route as PublicEventsRouteImport } from './routes/_public.events'
 import { Route as PublicAnnouncementsRouteImport } from './routes/_public.announcements'
 import { Route as AdminAdministratorIndexRouteImport } from './routes/_admin.administrator.index'
 import { Route as AdminAdministratorPrayerTimesRouteImport } from './routes/_admin.administrator.prayer-times'
+import { Route as AdminAdministratorGalleryRouteImport } from './routes/_admin.administrator.gallery'
 import { Route as AdminAdministratorEventsRouteImport } from './routes/_admin.administrator.events'
 import { Route as AdminAdministratorAnnouncementsRouteImport } from './routes/_admin.administrator.announcements'
 
@@ -50,6 +52,11 @@ const PublicMonthlyTimetableRoute = PublicMonthlyTimetableRouteImport.update({
   path: '/monthly-timetable',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicGalleryRoute = PublicGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicEventsRoute = PublicEventsRouteImport.update({
   id: '/events',
   path: '/events',
@@ -71,6 +78,12 @@ const AdminAdministratorPrayerTimesRoute =
     path: '/administrator/prayer-times',
     getParentRoute: () => AdminRoute,
   } as any)
+const AdminAdministratorGalleryRoute =
+  AdminAdministratorGalleryRouteImport.update({
+    id: '/administrator/gallery',
+    path: '/administrator/gallery',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminAdministratorEventsRoute =
   AdminAdministratorEventsRouteImport.update({
     id: '/administrator/events',
@@ -88,11 +101,13 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/announcements': typeof PublicAnnouncementsRoute
   '/events': typeof PublicEventsRoute
+  '/gallery': typeof PublicGalleryRoute
   '/monthly-timetable': typeof PublicMonthlyTimetableRoute
   '/prayer-times': typeof PublicPrayerTimesRoute
   '/admin/login': typeof AdminLoginRoute
   '/administrator/announcements': typeof AdminAdministratorAnnouncementsRoute
   '/administrator/events': typeof AdminAdministratorEventsRoute
+  '/administrator/gallery': typeof AdminAdministratorGalleryRoute
   '/administrator/prayer-times': typeof AdminAdministratorPrayerTimesRoute
   '/administrator/': typeof AdminAdministratorIndexRoute
 }
@@ -100,11 +115,13 @@ export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/announcements': typeof PublicAnnouncementsRoute
   '/events': typeof PublicEventsRoute
+  '/gallery': typeof PublicGalleryRoute
   '/monthly-timetable': typeof PublicMonthlyTimetableRoute
   '/prayer-times': typeof PublicPrayerTimesRoute
   '/admin/login': typeof AdminLoginRoute
   '/administrator/announcements': typeof AdminAdministratorAnnouncementsRoute
   '/administrator/events': typeof AdminAdministratorEventsRoute
+  '/administrator/gallery': typeof AdminAdministratorGalleryRoute
   '/administrator/prayer-times': typeof AdminAdministratorPrayerTimesRoute
   '/administrator': typeof AdminAdministratorIndexRoute
 }
@@ -114,12 +131,14 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteWithChildren
   '/_public/announcements': typeof PublicAnnouncementsRoute
   '/_public/events': typeof PublicEventsRoute
+  '/_public/gallery': typeof PublicGalleryRoute
   '/_public/monthly-timetable': typeof PublicMonthlyTimetableRoute
   '/_public/prayer-times': typeof PublicPrayerTimesRoute
   '/admin/login': typeof AdminLoginRoute
   '/_public/': typeof PublicIndexRoute
   '/_admin/administrator/announcements': typeof AdminAdministratorAnnouncementsRoute
   '/_admin/administrator/events': typeof AdminAdministratorEventsRoute
+  '/_admin/administrator/gallery': typeof AdminAdministratorGalleryRoute
   '/_admin/administrator/prayer-times': typeof AdminAdministratorPrayerTimesRoute
   '/_admin/administrator/': typeof AdminAdministratorIndexRoute
 }
@@ -129,11 +148,13 @@ export interface FileRouteTypes {
     | '/'
     | '/announcements'
     | '/events'
+    | '/gallery'
     | '/monthly-timetable'
     | '/prayer-times'
     | '/admin/login'
     | '/administrator/announcements'
     | '/administrator/events'
+    | '/administrator/gallery'
     | '/administrator/prayer-times'
     | '/administrator/'
   fileRoutesByTo: FileRoutesByTo
@@ -141,11 +162,13 @@ export interface FileRouteTypes {
     | '/'
     | '/announcements'
     | '/events'
+    | '/gallery'
     | '/monthly-timetable'
     | '/prayer-times'
     | '/admin/login'
     | '/administrator/announcements'
     | '/administrator/events'
+    | '/administrator/gallery'
     | '/administrator/prayer-times'
     | '/administrator'
   id:
@@ -154,12 +177,14 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_public/announcements'
     | '/_public/events'
+    | '/_public/gallery'
     | '/_public/monthly-timetable'
     | '/_public/prayer-times'
     | '/admin/login'
     | '/_public/'
     | '/_admin/administrator/announcements'
     | '/_admin/administrator/events'
+    | '/_admin/administrator/gallery'
     | '/_admin/administrator/prayer-times'
     | '/_admin/administrator/'
   fileRoutesById: FileRoutesById
@@ -214,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicMonthlyTimetableRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/gallery': {
+      id: '/_public/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof PublicGalleryRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/events': {
       id: '/_public/events'
       path: '/events'
@@ -242,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdministratorPrayerTimesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/administrator/gallery': {
+      id: '/_admin/administrator/gallery'
+      path: '/administrator/gallery'
+      fullPath: '/administrator/gallery'
+      preLoaderRoute: typeof AdminAdministratorGalleryRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/administrator/events': {
       id: '/_admin/administrator/events'
       path: '/administrator/events'
@@ -262,6 +301,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAdministratorAnnouncementsRoute: typeof AdminAdministratorAnnouncementsRoute
   AdminAdministratorEventsRoute: typeof AdminAdministratorEventsRoute
+  AdminAdministratorGalleryRoute: typeof AdminAdministratorGalleryRoute
   AdminAdministratorPrayerTimesRoute: typeof AdminAdministratorPrayerTimesRoute
   AdminAdministratorIndexRoute: typeof AdminAdministratorIndexRoute
 }
@@ -269,6 +309,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAdministratorAnnouncementsRoute: AdminAdministratorAnnouncementsRoute,
   AdminAdministratorEventsRoute: AdminAdministratorEventsRoute,
+  AdminAdministratorGalleryRoute: AdminAdministratorGalleryRoute,
   AdminAdministratorPrayerTimesRoute: AdminAdministratorPrayerTimesRoute,
   AdminAdministratorIndexRoute: AdminAdministratorIndexRoute,
 }
@@ -278,6 +319,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface PublicRouteChildren {
   PublicAnnouncementsRoute: typeof PublicAnnouncementsRoute
   PublicEventsRoute: typeof PublicEventsRoute
+  PublicGalleryRoute: typeof PublicGalleryRoute
   PublicMonthlyTimetableRoute: typeof PublicMonthlyTimetableRoute
   PublicPrayerTimesRoute: typeof PublicPrayerTimesRoute
   PublicIndexRoute: typeof PublicIndexRoute
@@ -286,6 +328,7 @@ interface PublicRouteChildren {
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAnnouncementsRoute: PublicAnnouncementsRoute,
   PublicEventsRoute: PublicEventsRoute,
+  PublicGalleryRoute: PublicGalleryRoute,
   PublicMonthlyTimetableRoute: PublicMonthlyTimetableRoute,
   PublicPrayerTimesRoute: PublicPrayerTimesRoute,
   PublicIndexRoute: PublicIndexRoute,

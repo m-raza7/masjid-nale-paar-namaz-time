@@ -1,16 +1,42 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, Moon } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
+
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+
 import logoImg from "../assets/nale-paar.jpeg";
 
-const nav: { to: string; label: string; external?: boolean }[] = [
-  { to: "/", label: "Home" },
-  { to: "/prayer-times", label: "Prayer Times" },
-  { to: "/announcements", label: "Announcements" },
-  { to: "/events", label: "Events" },
+/* ========================================================= */
+/* PUBLIC NAVIGATION */
+/* ========================================================= */
+
+const nav: {
+  to: string;
+  label: string;
+  external?: boolean;
+}[] = [
+  {
+    to: "/",
+    label: "Home",
+  },
+  {
+    to: "/prayer-times",
+    label: "Prayer Times",
+  },
+  {
+    to: "/announcements",
+    label: "Announcements",
+  },
+  {
+    to: "/events",
+    label: "Events",
+  },
+  {
+    to: "/gallery",
+    label: "Gallery",
+  },
   {
     to: "https://madarsa-nale-paar.vercel.app/",
     label: "Madarsa - Nale Paar",
@@ -18,21 +44,31 @@ const nav: { to: string; label: string; external?: boolean }[] = [
   },
 ];
 
+/* ========================================================= */
+/* SITE HEADER */
+/* ========================================================= */
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+        {/* ================================================= */}
+        {/* LOGO / BRAND */}
+        {/* ================================================= */}
+
         <div className="flex min-w-0 items-center gap-3">
-          {/* PROFILE IMAGE */}
+          {/* Profile / Masjid Image */}
           <img
             src={logoImg}
             onClick={() => setShowProfile(true)}
-            className="grid h-10 w-10 shrink-0 cursor-pointer place-items-center rounded-full object-cover transition-transform hover:scale-105"
+            className="h-10 w-10 shrink-0 cursor-pointer rounded-full object-cover transition-transform hover:scale-105"
             alt="Masjid Nale-paar"
           />
 
+          {/* Brand */}
           <Link to="/">
             <div className="min-w-0 leading-tight">
               <div className="truncate font-display text-xl font-semibold">Masjid Nale-paar</div>
@@ -44,41 +80,59 @@ export function SiteHeader() {
           </Link>
         </div>
 
+        {/* ================================================= */}
+        {/* DESKTOP NAVIGATION */}
+        {/* ================================================= */}
+
         <nav className="hidden items-center gap-1 md:flex">
-          {nav.map((n) =>
-            n.external ? (
+          {nav.map((item) =>
+            item.external ? (
               <a
-                key={n.label}
-                href={n.to}
+                key={item.label}
+                href={item.to}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >
-                {n.label}
+                {item.label}
               </a>
             ) : (
               <Link
-                key={n.to}
-                to={n.to}
+                key={item.to}
+                to={item.to}
                 className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                activeProps={{ className: "bg-accent text-foreground" }}
-                activeOptions={{ exact: n.to === "/" }}
+                activeProps={{
+                  className: "bg-accent text-foreground",
+                }}
+                activeOptions={{
+                  exact: item.to === "/",
+                }}
               >
-                {n.label}
+                {item.label}
               </Link>
             ),
           )}
         </nav>
 
+        {/* ================================================= */}
+        {/* RIGHT SIDE */}
+        {/* ================================================= */}
+
         <div className="flex items-center gap-2">
+          {/* Theme */}
           <ThemeToggle />
 
+          {/* Admin */}
           <Link
             to="/admin/login"
             className="hidden rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex"
           >
             Admin
           </Link>
+
+          {/* ================================================= */}
+          {/* MOBILE MENU */}
+          {/* ================================================= */}
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -89,18 +143,37 @@ export function SiteHeader() {
 
             <SheetContent side="right" className="w-72">
               <div className="mt-8 flex flex-col gap-1">
-                {nav.map((n) => (
-                  <Link
-                    key={n.to}
-                    to={n.to}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-4 py-3 text-base font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                    activeProps={{ className: "bg-accent text-foreground" }}
-                    activeOptions={{ exact: n.to === "/" }}
-                  >
-                    {n.label}
-                  </Link>
-                ))}
+                {nav.map((item) =>
+                  item.external ? (
+                    <a
+                      key={item.label}
+                      href={item.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setOpen(false)}
+                      className="rounded-xl px-4 py-3 text-base font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setOpen(false)}
+                      className="rounded-xl px-4 py-3 text-base font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                      activeProps={{
+                        className: "bg-accent text-foreground",
+                      }}
+                      activeOptions={{
+                        exact: item.to === "/",
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ),
+                )}
+
+                {/* Mobile Admin */}
 
                 <Link
                   to="/admin/login"
@@ -115,9 +188,9 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* ================================================= */}
-      {/* FULL SCREEN PROFILE IMAGE PREVIEW                */}
-      {/* ================================================= */}
+      {/* =================================================== */}
+      {/* FULL SCREEN PROFILE IMAGE */}
+      {/* =================================================== */}
 
       {showProfile && (
         <div
@@ -128,7 +201,7 @@ export function SiteHeader() {
             src={logoImg}
             alt="Masjid Nale-paar"
             className="max-h-[90vh] max-w-[90vw] rounded-full object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
           />
         </div>
       )}
@@ -136,19 +209,34 @@ export function SiteHeader() {
   );
 }
 
+/* ========================================================= */
+/* SITE FOOTER */
+/* ========================================================= */
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 bg-muted/40">
       <div className="container mx-auto grid gap-8 px-4 py-12 md:grid-cols-3">
+        {/* ================================================= */}
+        {/* ABOUT */}
+        {/* ================================================= */}
+
         <div>
           <div className="font-display text-2xl">Masjid Nale-paar</div>
+
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             Serving the community with daily prayers, Jumuah, and education. Updated prayer times by
             the masjid administration.
           </p>
         </div>
+
+        {/* ================================================= */}
+        {/* ADDRESS */}
+        {/* ================================================= */}
+
         <div>
           <div className="text-xs uppercase tracking-[0.2em] text-gold">Visit</div>
+
           <p className="mt-3 text-sm text-muted-foreground">
             Masjid Nale Paar, Cantonment Area,
             <br />
@@ -157,8 +245,14 @@ export function SiteFooter() {
             Nagpur, Maharashtra
           </p>
         </div>
+
+        {/* ================================================= */}
+        {/* CONTACT */}
+        {/* ================================================= */}
+
         <div>
           <div className="text-xs uppercase tracking-[0.2em] text-gold">Contact</div>
+
           <p className="mt-3 text-sm text-muted-foreground">
             +1 (555) 123-4567
             <br />
@@ -166,6 +260,9 @@ export function SiteFooter() {
           </p>
         </div>
       </div>
+
+      {/* Copyright */}
+
       <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} Masjid Nale-paar. All times subject to change.
       </div>
