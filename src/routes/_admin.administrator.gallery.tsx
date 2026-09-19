@@ -18,8 +18,13 @@ export const Route = createFileRoute("/_admin/administrator/gallery")({
   component: AdminGallery,
 });
 
+// ============================================================
+// ADMIN GALLERY
+// ============================================================
+
 function AdminGallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
@@ -30,9 +35,9 @@ function AdminGallery() {
 
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
-  /* ========================================================= */
-  /* LOAD GALLERY */
-  /* ========================================================= */
+  // ==========================================================
+  // LOAD GALLERY
+  // ==========================================================
 
   const loadGallery = async () => {
     try {
@@ -56,36 +61,38 @@ function AdminGallery() {
     loadGallery();
   }, []);
 
-  /* ========================================================= */
-  /* ADD */
-  /* ========================================================= */
+  // ==========================================================
+  // ADD
+  // ==========================================================
 
   const handleAdd = () => {
     setEditingImage(null);
     setShowModal(true);
   };
 
-  /* ========================================================= */
-  /* EDIT */
-  /* ========================================================= */
+  // ==========================================================
+  // EDIT
+  // ==========================================================
 
   const handleEdit = (image: GalleryImage) => {
+    console.log("Editing gallery image:", image);
+
     setEditingImage(image);
     setShowModal(true);
   };
 
-  /* ========================================================= */
-  /* CLOSE MODAL */
-  /* ========================================================= */
+  // ==========================================================
+  // CLOSE MODAL
+  // ==========================================================
 
   const handleCloseModal = () => {
     setShowModal(false);
     setEditingImage(null);
   };
 
-  /* ========================================================= */
-  /* DELETE */
-  /* ========================================================= */
+  // ==========================================================
+  // DELETE
+  // ==========================================================
 
   const handleDelete = async (image: GalleryImage) => {
     const confirmed = window.confirm(`Are you sure you want to delete "${image.title}"?`);
@@ -111,11 +118,13 @@ function AdminGallery() {
     }
   };
 
-  /* ========================================================= */
-  /* SAVED */
-  /* ========================================================= */
+  // ==========================================================
+  // SAVED
+  // ==========================================================
 
   const handleSaved = (savedImage: GalleryImage) => {
+    console.log("Saved gallery image:", savedImage);
+
     setImages((current) => {
       const exists = current.some((item) => item.id === savedImage.id);
 
@@ -129,11 +138,15 @@ function AdminGallery() {
     handleCloseModal();
   };
 
+  // ==========================================================
+  // UI
+  // ==========================================================
+
   return (
     <div className="min-h-screen bg-background">
-      {/* =================================================== */}
+      {/* ================================================== */}
       {/* HEADER */}
-      {/* =================================================== */}
+      {/* ================================================== */}
 
       <section className="border-b bg-card">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -166,9 +179,9 @@ function AdminGallery() {
         </div>
       </section>
 
-      {/* =================================================== */}
+      {/* ================================================== */}
       {/* CONTENT */}
-      {/* =================================================== */}
+      {/* ================================================== */}
 
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         {/* Loading */}
@@ -227,17 +240,17 @@ function AdminGallery() {
         )}
       </main>
 
-      {/* =================================================== */}
-      {/* FORM MODAL */}
-      {/* =================================================== */}
+      {/* ================================================== */}
+      {/* ADD / EDIT MODAL */}
+      {/* ================================================== */}
 
       {showModal && (
         <GalleryFormModal image={editingImage} onClose={handleCloseModal} onSaved={handleSaved} />
       )}
 
-      {/* =================================================== */}
+      {/* ================================================== */}
       {/* IMAGE VIEWER */}
-      {/* =================================================== */}
+      {/* ================================================== */}
 
       {selectedImage && (
         <ImageViewer image={selectedImage} onClose={() => setSelectedImage(null)} />
@@ -246,9 +259,9 @@ function AdminGallery() {
   );
 }
 
-/* ============================================================= */
-/* GALLERY ADMIN CARD */
-/* ============================================================= */
+// ============================================================
+// GALLERY ADMIN CARD
+// ============================================================
 
 function GalleryAdminCard({
   image,
@@ -294,6 +307,8 @@ function GalleryAdminCard({
           <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{image.description}</p>
         )}
 
+        {/* Actions */}
+
         <div className="mt-4 flex gap-2">
           <button
             type="button"
@@ -324,9 +339,9 @@ function GalleryAdminCard({
   );
 }
 
-/* ============================================================= */
-/* ADD / EDIT FORM */
-/* ============================================================= */
+// ============================================================
+// ADD / EDIT FORM MODAL
+// ============================================================
 
 function GalleryFormModal({
   image,
@@ -351,25 +366,26 @@ function GalleryFormModal({
 
   const isEditing = Boolean(image);
 
-  /* ======================================================= */
-  /* FILE CHANGE */
-  /* ======================================================= */
+  // ==========================================================
+  // FILE CHANGE
+  // ==========================================================
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
-
-    console.log("Selected gallery file:", selectedFile);
 
     if (!selectedFile) {
       return;
     }
 
+    console.log("Selected gallery file:", selectedFile);
+
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
     if (!allowedTypes.includes(selectedFile.type)) {
-      toast.error(`Invalid image type: ${selectedFile.type || "unknown"}`);
+      toast.error("Please select JPG, PNG, WEBP or GIF.");
 
       event.target.value = "";
+
       return;
     }
 
@@ -379,29 +395,39 @@ function GalleryFormModal({
       toast.error("Image size must be less than 5 MB.");
 
       event.target.value = "";
+
       return;
     }
 
-    setFile(selectedFile);
+    // Revoke previous object URL
+    if (preview && preview.startsWith("blob:")) {
+      URL.revokeObjectURL(preview);
+    }
 
     const objectUrl = URL.createObjectURL(selectedFile);
 
+    setFile(selectedFile);
     setPreview(objectUrl);
 
-    console.log("Gallery preview created:", objectUrl);
+    console.log("Gallery preview:", objectUrl);
   };
 
-  /* ======================================================= */
-  /* REMOVE FILE */
-  /* ======================================================= */
+  // ==========================================================
+  // REMOVE SELECTED NEW IMAGE
+  // ==========================================================
 
   const handleRemoveFile = () => {
+    if (preview && preview.startsWith("blob:")) {
+      URL.revokeObjectURL(preview);
+    }
+
     setFile(null);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
 
+    // Restore original image while editing
     if (image) {
       setPreview(image.image_url);
     } else {
@@ -409,27 +435,52 @@ function GalleryFormModal({
     }
   };
 
-  /* ======================================================= */
-  /* SUBMIT */
-  /* ======================================================= */
+  // ==========================================================
+  // SUBMIT
+  // ==========================================================
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (saving) {
+      return;
+    }
+
+    const trimmedTitle = title.trim();
+
+    const trimmedDescription = description.trim();
+
     console.log("========== GALLERY SUBMIT ==========");
 
-    console.log("Title:", title);
-    console.log("Description:", description);
-    console.log("File:", file);
     console.log("Editing:", isEditing);
 
-    if (!title.trim()) {
+    console.log("Image ID:", image?.id);
+
+    console.log("Title:", trimmedTitle);
+
+    console.log("Description:", trimmedDescription);
+
+    console.log("File:", file);
+
+    // --------------------------------------------------------
+    // Validation
+    // --------------------------------------------------------
+
+    if (!trimmedTitle) {
       toast.error("Please enter an image title.");
+
       return;
     }
 
     if (!isEditing && !file) {
       toast.error("Please select an image.");
+
+      return;
+    }
+
+    if (isEditing && !image?.id) {
+      toast.error("Gallery image ID is missing.");
+
       return;
     }
 
@@ -442,17 +493,22 @@ function GalleryFormModal({
 
       let savedImage: GalleryImage;
 
-      /* ================================================= */
-      /* UPDATE */
-      /* ================================================= */
+      // ======================================================
+      // UPDATE
+      // ======================================================
 
       if (isEditing && image) {
-        console.log("Updating gallery image:", image.id);
+        console.log("Calling updateGalleryImage with:", {
+          id: image.id,
+          title: trimmedTitle,
+          description: trimmedDescription,
+          file,
+        });
 
         savedImage = await updateGalleryImage({
           id: image.id,
-          title: title.trim(),
-          description: description.trim(),
+          title: trimmedTitle,
+          description: trimmedDescription,
           file,
         });
 
@@ -461,17 +517,22 @@ function GalleryFormModal({
         toast.success("Gallery image updated successfully.", {
           id: "gallery-upload",
         });
-      } else {
+      }
 
-      /* ================================================= */
-      /* ADD */
-      /* ================================================= */
-        console.log("Uploading new gallery image...");
+      // ======================================================
+      // ADD
+      // ======================================================
+      else {
+        if (!file) {
+          throw new Error("Please select an image.");
+        }
+
+        console.log("Calling addGalleryImage...");
 
         savedImage = await addGalleryImage({
-          file: file!,
-          title: title.trim(),
-          description: description.trim(),
+          file,
+          title: trimmedTitle,
+          description: trimmedDescription,
         });
 
         console.log("Uploaded gallery image:", savedImage);
@@ -481,6 +542,7 @@ function GalleryFormModal({
         });
       }
 
+      // Update gallery list
       onSaved(savedImage);
     } catch (error) {
       console.error("========== GALLERY ERROR ==========");
@@ -488,7 +550,7 @@ function GalleryFormModal({
       console.error(error);
 
       toast.error(
-        error instanceof Error ? error.message : "Something went wrong while uploading the image.",
+        error instanceof Error ? error.message : "Something went wrong while saving the image.",
         {
           id: "gallery-upload",
         },
@@ -498,9 +560,9 @@ function GalleryFormModal({
     }
   };
 
-  /* ======================================================= */
-  /* MODAL */
-  /* ======================================================= */
+  // ==========================================================
+  // MODAL
+  // ==========================================================
 
   return (
     <div
@@ -512,7 +574,9 @@ function GalleryFormModal({
       }}
     >
       <div className="max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-background shadow-2xl">
-        {/* Header */}
+        {/* ================================================= */}
+        {/* HEADER */}
+        {/* ================================================= */}
 
         <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-background px-5 py-4 sm:px-6">
           <div>
@@ -538,7 +602,9 @@ function GalleryFormModal({
           </button>
         </div>
 
-        {/* Form */}
+        {/* ================================================= */}
+        {/* FORM */}
+        {/* ================================================= */}
 
         <form onSubmit={handleSubmit} className="space-y-5 p-5 sm:p-6">
           {/* ================================================= */}
@@ -695,9 +761,9 @@ function GalleryFormModal({
   );
 }
 
-/* ============================================================= */
-/* IMAGE VIEWER */
-/* ============================================================= */
+// ============================================================
+// IMAGE VIEWER
+// ============================================================
 
 function ImageViewer({ image, onClose }: { image: GalleryImage; onClose: () => void }) {
   return (

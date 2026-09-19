@@ -1,81 +1,125 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
+// ============================================================
+// TYPES
+// ============================================================
+
 export type GalleryImage = Database["public"]["Tables"]["gallery_images"]["Row"];
 
 export type GalleryImageInsert = Database["public"]["Tables"]["gallery_images"]["Insert"];
 
 export type GalleryImageUpdate = Database["public"]["Tables"]["gallery_images"]["Update"];
 
+// ============================================================
+// CONSTANTS
+// ============================================================
+
 const GALLERY_BUCKET = "masjid-gallery";
 const GALLERY_FOLDER = "gallery";
 
-// --------------------------------------------------
-// GET GALLERY IMAGES
-// --------------------------------------------------
+// ============================================================
+// GET ALL GALLERY IMAGES
+// ============================================================
 
 export async function getGalleryImages(): Promise<GalleryImage[]> {
-  const { data, error } = await supabase
-    .from("gallery_images")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("gallery_images").select("*").order("created_at", {
+    ascending: false,
+  });
 
   if (error) {
     console.error("Error fetching gallery images:", error);
+
     throw new Error(error.message);
   }
 
   return data ?? [];
 }
 
-// --------------------------------------------------
-// VALIDATE IMAGE
-// --------------------------------------------------
+// ============================================================
+// GET SINGLE GALLERY IMAGE
+// ============================================================
 
-function validateImage(file: File) {
-  if (!file) {
-    throw new Error("Please select an image.");
+export async function getGalleryImage(id: string): Promise<GalleryImage | null> {
+  const { data, error } = await supabase
+    .from("gallery_images")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching gallery image:", error);
+
+    throw new Error(error.message);
   }
 
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Please select a valid image file.");
-  }
-
-  // 10 MB maximum
-  const maxSize = 10 * 1024 * 1024;
-
-  if (file.size > maxSize) {
-    throw new Error("Image size must be less than 10 MB.");
-  }
+  return data;
 }
 
-// --------------------------------------------------
-// CREATE IMAGE PATH
-// --------------------------------------------------
+// ============================================================
+// CREATE UNIQUE IMAGE PATH
+// ============================================================
 
-function createImagePath(file: File) {
+function createImagePath(file: File): string {
   const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
 
-  const fileName = `${crypto.randomUUID()}.${extension}`;
+  const safeExtension = extension.replace(/[^a-z0-9]/gi, "");
 
-  return `${GALLERY_FOLDER}/${fileName}`;
+  const uniqueId = crypto.randomUUID();
+
+  return `${GALLERY_FOLDER}/${uniqueId}.${safeExtension}`;
 }
 
-// --------------------------------------------------
-// UPLOAD IMAGE TO STORAGE
-// --------------------------------------------------
+// ============================================================
+// VALIDATE IMAGE
+// ============================================================
 
-async function uploadImageToStorage(file: File) {
+function validateImage(file: File): void {
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error("Invalid image format. Please upload JPG, PNG, WEBP, or GIF.");
+  }
+
+  const maxSize = 5 * 1024 * 1024;
+
+  if (file.size > maxSize) {
+    throw new Error("Image size must be less than 5 MB.");
+  }
+}
+
+// ============================================================
+// GET CURRENT USER
+// ============================================================
+
+async function getCurrentUserId(): Promise<string> {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!user) {
+    throw new Error("You must be logged in to manage gallery images.");
+  }
+
+  return user.id;
+}
+
+// ============================================================
+// UPLOAD IMAGE TO STORAGE
+// ============================================================
+
+async function uploadImageToStorage(file: File): Promise<{
+  imagePath: string;
+  imageUrl: string;
+}> {
   validateImage(file);
 
   const imagePath = createImagePath(file);
-
-  console.log("Uploading gallery image...");
-  console.log("Bucket:", GALLERY_BUCKET);
-  console.log("Path:", imagePath);
-  console.log("File:", file.name);
-  console.log("Type:", file.type);
-  console.log("Size:", file.size);
 
   const { error: uploadError } = await supabase.storage
     .from(GALLERY_BUCKET)
@@ -86,187 +130,237 @@ async function uploadImageToStorage(file: File) {
     });
 
   if (uploadError) {
-    console.error("Storage upload error:", uploadError);
+    console.error("Error uploading gallery image:", uploadError);
 
-    throw new Error(`Image upload failed: ${uploadError.message}`);
+    throw new Error(uploadError.message);
   }
 
-  // Get public URL
   const {
     data: { publicUrl },
   } = supabase.storage.from(GALLERY_BUCKET).getPublicUrl(imagePath);
 
   if (!publicUrl) {
-    throw new Error("Could not generate public image URL.");
+    await supabase.storage.from(GALLERY_BUCKET).remove([imagePath]);
+
+    throw new Error("Could not generate the public image URL.");
   }
 
-  console.log("Image uploaded successfully.");
-  console.log("Public URL:", publicUrl);
-
   return {
-    imageUrl: publicUrl,
     imagePath,
+    imageUrl: publicUrl,
   };
 }
 
-// --------------------------------------------------
-// DELETE IMAGE FROM STORAGE
-// --------------------------------------------------
-
-async function deleteImageFromStorage(imagePath: string) {
-  if (!imagePath) {
-    return;
-  }
-
-  const { error } = await supabase.storage.from(GALLERY_BUCKET).remove([imagePath]);
-
-  if (error) {
-    console.error("Error deleting image from storage:", error);
-
-    throw new Error(error.message);
-  }
-}
-
-// --------------------------------------------------
+// ============================================================
 // ADD GALLERY IMAGE
-// --------------------------------------------------
+// ============================================================
 
-export async function addGalleryImage(data: {
-  title: string;
-  description?: string | null;
+export async function addGalleryImage({
+  file,
+  title,
+  description,
+}: {
   file: File;
+  title: string;
+  description?: string;
 }): Promise<GalleryImage> {
-  if (!data.title.trim()) {
+  const trimmedTitle = title.trim();
+
+  if (!trimmedTitle) {
     throw new Error("Gallery image title is required.");
   }
 
-  // Upload image first
-  const { imageUrl, imagePath } = await uploadImageToStorage(data.file);
+  const userId = await getCurrentUserId();
 
-  // Get current user
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+  // Upload image
+  const { imagePath, imageUrl } = await uploadImageToStorage(file);
 
-  if (userError) {
-    // Remove uploaded file if user lookup fails
-    await deleteImageFromStorage(imagePath).catch(() => {});
-
-    throw new Error(userError.message);
-  }
-
-  if (!user) {
-    await deleteImageFromStorage(imagePath).catch(() => {});
-
-    throw new Error("You must be logged in as an admin.");
-  }
-
-  // Insert database record
-  const insertData: GalleryImageInsert = {
-    title: data.title.trim(),
-    description: data.description?.trim() || null,
+  const galleryData: GalleryImageInsert = {
+    title: trimmedTitle,
+    description: description?.trim() || null,
     image_url: imageUrl,
     image_path: imagePath,
-    created_by: user.id,
+    created_by: userId,
   };
 
-  const { data: galleryImage, error } = await supabase
+  const { data, error } = await supabase
     .from("gallery_images")
-    .insert(insertData)
+    .insert(galleryData)
     .select("*")
     .single();
 
+  // Remove uploaded image if database insert fails
   if (error) {
-    console.error("Error inserting gallery image:", error);
+    await supabase.storage.from(GALLERY_BUCKET).remove([imagePath]);
 
-    // Database insert failed, remove uploaded image
-    await deleteImageFromStorage(imagePath).catch(() => {});
+    console.error("Error creating gallery record:", error);
 
     throw new Error(error.message);
   }
 
-  console.log("Gallery image added successfully:", galleryImage);
+  if (!data) {
+    await supabase.storage.from(GALLERY_BUCKET).remove([imagePath]);
 
-  return galleryImage;
+    throw new Error("Gallery image was created but no data was returned.");
+  }
+
+  return data;
 }
 
-// --------------------------------------------------
+// ============================================================
 // UPDATE GALLERY IMAGE
-// --------------------------------------------------
+// ============================================================
 
-export async function updateGalleryImage(
-  id: string,
-  data: {
-    title: string;
-    description?: string | null;
-    file?: File | null;
-  },
-): Promise<GalleryImage> {
-  if (!data.title.trim()) {
+export async function updateGalleryImage({
+  id,
+  title,
+  description,
+  file,
+}: {
+  id: string;
+  title: string;
+  description?: string;
+  file?: File | null;
+}): Promise<GalleryImage> {
+  console.log("========== UPDATE GALLERY IMAGE ==========");
+  console.log("ID:", id);
+  console.log("Title:", title);
+  console.log("Description:", description);
+  console.log("New file:", file);
+
+  // ----------------------------------------------------------
+  // VALIDATE ID
+  // ----------------------------------------------------------
+
+  if (!id) {
+    throw new Error("Gallery image ID is required.");
+  }
+
+  // ----------------------------------------------------------
+  // VALIDATE TITLE
+  // ----------------------------------------------------------
+
+  const trimmedTitle = title.trim();
+
+  if (!trimmedTitle) {
     throw new Error("Gallery image title is required.");
   }
 
-  let imageUrl: string | undefined;
-  let imagePath: string | undefined;
+  // ----------------------------------------------------------
+  // COMMON UPDATE DATA
+  // ----------------------------------------------------------
 
-  // If a new image was selected
-  if (data.file) {
-    const uploaded = await uploadImageToStorage(data.file);
+  const updateData: GalleryImageUpdate = {
+    title: trimmedTitle,
+    description: description?.trim() || null,
+  };
 
-    imageUrl = uploaded.imageUrl;
-    imagePath = uploaded.imagePath;
+  // ==========================================================
+  // CASE 1
+  // NO NEW IMAGE
+  // Only title / description are updated
+  // ==========================================================
+
+  if (!file) {
+    console.log("Updating text only...");
+
+    const { data, error } = await supabase
+      .from("gallery_images")
+      .update(updateData)
+      .eq("id", id)
+      .select("*")
+      .single();
+
+    if (error) {
+      console.error("Error updating gallery text:", error);
+
+      throw new Error(error.message);
+    }
+
+    if (!data) {
+      throw new Error("Gallery image was not found.");
+    }
+
+    console.log("Gallery text updated successfully:", data);
+
+    return data;
   }
 
-  // Get old image information
-  const { data: oldImage, error: oldImageError } = await supabase
+  // ==========================================================
+  // CASE 2
+  // NEW IMAGE SELECTED
+  // ==========================================================
+
+  console.log("Replacing gallery image...");
+
+  // ----------------------------------------------------------
+  // Get existing database record
+  // ----------------------------------------------------------
+
+  const { data: existingImage, error: existingError } = await supabase
     .from("gallery_images")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (oldImageError) {
-    if (imagePath) {
-      await deleteImageFromStorage(imagePath).catch(() => {});
-    }
+  if (existingError) {
+    console.error("Error finding existing gallery image:", existingError);
 
-    throw new Error(oldImageError.message);
+    throw new Error(existingError.message);
   }
 
-  const updateData: GalleryImageUpdate = {
-    title: data.title.trim(),
-    description: data.description?.trim() || null,
-  };
-
-  if (imageUrl && imagePath) {
-    updateData.image_url = imageUrl;
-    updateData.image_path = imagePath;
+  if (!existingImage) {
+    throw new Error("Gallery image was not found.");
   }
 
-  const { data: updatedImage, error } = await supabase
+  // ----------------------------------------------------------
+  // Upload new image
+  // ----------------------------------------------------------
+
+  const { imagePath: newImagePath, imageUrl: newImageUrl } = await uploadImageToStorage(file);
+
+  console.log("New image uploaded:", newImagePath);
+
+  // Add new image information
+  updateData.image_path = newImagePath;
+  updateData.image_url = newImageUrl;
+
+  // ----------------------------------------------------------
+  // Update database
+  // ----------------------------------------------------------
+
+  const { data: updatedImage, error: updateError } = await supabase
     .from("gallery_images")
     .update(updateData)
     .eq("id", id)
     .select("*")
     .single();
 
-  if (error) {
-    console.error("Error updating gallery image:", error);
+  // ----------------------------------------------------------
+  // Database update failed
+  // ----------------------------------------------------------
 
-    // Remove newly uploaded image if DB update failed
-    if (imagePath) {
-      await deleteImageFromStorage(imagePath).catch(() => {});
-    }
+  if (updateError || !updatedImage) {
+    // Remove newly uploaded image
+    await supabase.storage.from(GALLERY_BUCKET).remove([newImagePath]);
 
-    throw new Error(error.message);
+    console.error("Error updating gallery database:", updateError);
+
+    throw new Error(updateError?.message || "Failed to update gallery image.");
   }
 
-  // If a new image replaced the old one,
-  // delete the old image from Storage
-  if (imagePath && oldImage.image_path && oldImage.image_path !== imagePath) {
-    await deleteImageFromStorage(oldImage.image_path).catch((storageError) => {
-      console.warn("Old gallery image could not be deleted:", storageError);
-    });
+  // ----------------------------------------------------------
+  // Delete OLD image
+  // ----------------------------------------------------------
+
+  if (existingImage.image_path) {
+    const { error: removeOldError } = await supabase.storage
+      .from(GALLERY_BUCKET)
+      .remove([existingImage.image_path]);
+
+    if (removeOldError) {
+      console.warn("Database updated, but old image could not be deleted:", removeOldError.message);
+    }
   }
 
   console.log("Gallery image updated successfully:", updatedImage);
@@ -274,42 +368,63 @@ export async function updateGalleryImage(
   return updatedImage;
 }
 
-// --------------------------------------------------
+// ============================================================
 // DELETE GALLERY IMAGE
-// --------------------------------------------------
+// ============================================================
 
 export async function deleteGalleryImage(id: string): Promise<void> {
+  // ----------------------------------------------------------
   // Get image first
+  // ----------------------------------------------------------
+
   const { data: image, error: fetchError } = await supabase
     .from("gallery_images")
-    .select("*")
+    .select("id, image_path")
     .eq("id", id)
     .single();
 
-  if (fetchError) {
-    console.error("Error finding gallery image:", fetchError);
-
-    throw new Error(fetchError.message);
+  if (fetchError || !image) {
+    throw new Error(fetchError?.message || "Gallery image not found.");
   }
 
+  // ----------------------------------------------------------
   // Delete database record
+  // ----------------------------------------------------------
+
   const { error: deleteError } = await supabase.from("gallery_images").delete().eq("id", id);
 
   if (deleteError) {
-    console.error("Error deleting gallery database record:", deleteError);
+    console.error("Error deleting gallery record:", deleteError);
 
     throw new Error(deleteError.message);
   }
 
+  // ----------------------------------------------------------
   // Delete Storage image
-  if (image.image_path) {
-    await deleteImageFromStorage(image.image_path).catch((storageError) => {
-      console.warn(
-        "Database record deleted, but Storage image could not be deleted:",
-        storageError,
-      );
-    });
-  }
+  // ----------------------------------------------------------
 
-  console.log("Gallery image deleted successfully.");
+  if (image.image_path) {
+    const { error: storageError } = await supabase.storage
+      .from(GALLERY_BUCKET)
+      .remove([image.image_path]);
+
+    if (storageError) {
+      console.warn(
+        "Database record deleted, but Storage image could not be removed:",
+        storageError.message,
+      );
+    }
+  }
+}
+
+// ============================================================
+// GET PUBLIC IMAGE URL
+// ============================================================
+
+export function getGalleryImageUrl(imagePath: string): string {
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(GALLERY_BUCKET).getPublicUrl(imagePath);
+
+  return publicUrl;
 }
