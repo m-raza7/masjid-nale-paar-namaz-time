@@ -39,7 +39,7 @@ const nav: {
   },
   {
     to: "https://madarsa-nale-paar.vercel.app/",
-    label: "Madarsa - Nale Paar",
+    label: "Madarsa",
     external: true,
   },
 ];

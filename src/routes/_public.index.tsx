@@ -60,8 +60,6 @@ const rakaatData = [
     name: "Fajr",
     subtitle: "Dawn",
     icon: Sunrise,
-    color: "text-sky-700",
-    bg: "bg-sky-50",
     before: 2,
     beforeLabel: "Sunnat Mu'akkadah",
     Farz: 2,
@@ -76,8 +74,6 @@ const rakaatData = [
     name: "Dhuhr",
     subtitle: "Noon",
     icon: Sun,
-    color: "text-green-700",
-    bg: "bg-green-50",
     before: 4,
     beforeLabel: "Sunnat Mu'akkadah",
     Farz: 4,
@@ -92,8 +88,6 @@ const rakaatData = [
     name: "Asr",
     subtitle: "Afternoon",
     icon: Sun,
-    color: "text-orange-600",
-    bg: "bg-orange-50",
     before: 4,
     beforeLabel: "",
     Farz: 4,
@@ -108,8 +102,6 @@ const rakaatData = [
     name: "Maghrib",
     subtitle: "After Sunset",
     icon: Sunset,
-    color: "text-pink-700",
-    bg: "bg-pink-50",
     before: "-",
     beforeLabel: "",
     Farz: 3,
@@ -124,8 +116,6 @@ const rakaatData = [
     name: "Isha",
     subtitle: "Night",
     icon: Moon,
-    color: "text-purple-700",
-    bg: "bg-purple-50",
     before: 4,
     beforeLabel: "",
     Farz: 4,
@@ -140,8 +130,6 @@ const rakaatData = [
     name: "Juma",
     subtitle: "Friday",
     icon: Calendar,
-    color: "text-emerald-700",
-    bg: "bg-emerald-50",
     before: 4,
     beforeLabel: "Sunnat Mu'akkadah",
     Farz: 2,
@@ -154,7 +142,6 @@ const rakaatData = [
     total: 14,
   },
 ];
-
 // ============================================================
 // ROUTE
 // ============================================================
@@ -459,7 +446,9 @@ function HomePage() {
               </div>
 
               <div className="mt-3 flex items-baseline justify-between">
-                <div className="font-display text-6xl text-primary">{next?.name ?? "—"}</div>
+                <div className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-primary">
+                  {next?.name ?? "—"}
+                </div>
 
                 <div className="font-display text-4xl text-gold">
                   {formatTime12(next?.jamaat ?? null)}
@@ -573,95 +562,276 @@ function HomePage() {
           RAKA'AT SECTION
       ====================================================== */}
 
-      <section className="container mx-auto px-4 pb-20">
-        <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+      <section className="container mx-auto px-3 pb-16 sm:px-4 sm:pb-20">
+        {/* =========================================================
+      SECTION HEADER
+  ========================================================= */}
+        <div className="mb-6 flex flex-col gap-5 sm:mb-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-gold">
-              <Sparkles className="h-4 w-4" />
+            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b99745] sm:text-xs">
+              <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Daily Salah
             </div>
 
-            <h2 className="mt-2 font-display text-4xl text-primary md:text-5xl">5 Daily Prayers</h2>
+            <h2 className="mt-2 font-display text-3xl leading-tight text-[#07553f] dark:text-[#e8c765] sm:text-4xl md:text-5xl">
+              5 Daily Prayers
+            </h2>
 
-            <p className="mt-2 text-sm text-muted-foreground md:text-base">
+            <p className="mt-2 text-xs text-muted-foreground sm:text-sm md:text-base">
               Raka'at (Units) in Each Prayer
             </p>
           </div>
 
-          <div className="flex items-center gap-3 rounded-2xl border border-gold/20 bg-card px-5 py-4 shadow-sm">
-            <Clock className="h-6 w-6 text-gold" />
+          {/* DAILY REMINDER */}
+          <div
+            className="
+        flex w-full items-center gap-3
+        rounded-2xl
+        border border-[#c9a646]/30
+        bg-[#fffdf5]
+        px-4 py-3
+        shadow-sm
+        dark:border-[#c9a646]/30
+        dark:bg-[#062f25]
+        sm:w-auto sm:px-5 sm:py-4
+      "
+          >
+            <div
+              className="
+          flex h-10 w-10 shrink-0 items-center justify-center
+          rounded-full
+          border border-[#c9a646]/40
+          bg-[#f7edc8]
+          dark:bg-[#b99745]/10
+        "
+            >
+              <Clock className="h-5 w-5 text-[#a8842f] dark:text-[#e1bc52]" />
+            </div>
 
-            <div>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground sm:text-xs">
                 Daily Reminder
               </p>
 
-              <p className="font-medium text-primary">Salah is the key to Jannah</p>
+              <p className="mt-0.5 truncate text-sm font-medium text-[#07553f] dark:text-[#f2e5b5] sm:text-base">
+                Salah is the key to Jannah
+              </p>
             </div>
           </div>
         </div>
 
-        {/* RAKAAT TABLE */}
+        {/* =========================================================
+      RAKAAT TABLE
+      SAME TABLE ON ALL DEVICES
+  ========================================================= */}
+        <div
+          className="
+      w-full
+      overflow-hidden
+      rounded-2xl
+      border
+      border-[#b99745]
+      bg-[#fffdf5]
+      shadow-[0_10px_35px_rgba(6,67,50,0.10)]
+      dark:border-[#c9a646]
+      dark:bg-[#032a21]
+      dark:shadow-[0_10px_40px_rgba(0,0,0,0.30)]
+      md:rounded-3xl
+    "
+        >
+          {/* =======================================================
+        HORIZONTAL SCROLL CONTAINER
 
-        <div className="overflow-hidden rounded-3xl border border-gold/20 bg-card shadow-elegant">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1050px] border-collapse">
+        Mobile:
+        320px → horizontal scroll
+
+        Tablet:
+        horizontal scroll if needed
+
+        Desktop:
+        table fits normally
+    ======================================================= */}
+          <div
+            className="
+        w-full
+        overflow-x-auto
+        overscroll-x-contain
+        [scrollbar-color:#b99745_transparent]
+        [scrollbar-width:thin]
+      "
+          >
+            <table className="w-[1000px] min-w-[1000px] border-collapse sm:w-[1100px] sm:min-w-[1100px] lg:w-full lg:min-w-[1000px]">
+              {/* =====================================================
+            TABLE HEADER
+        ===================================================== */}
               <thead>
-                <tr className="text-primary-foreground">
-                  <th className="w-[20%] bg-primary px-6 py-5 text-left">
-                    <div className="text-sm font-bold uppercase tracking-wide">Prayer</div>
+                <tr className="text-white">
+                  {/* PRAYER */}
+                  <th
+                    className="
+                w-[20%]
+                border-r border-[#c9a646]/30
+                bg-[#07553f]
+                px-4 py-4
+                text-left
+                dark:bg-[#064b38]
+                sm:px-5
+                md:px-6 md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-[0.16em] md:text-sm">
+                      Prayer
+                    </div>
                   </th>
 
-                  <th className="w-[12%] bg-emerald-700 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Sunnat</div>
+                  {/* SUNNAT BEFORE */}
+                  <th
+                    className="
+                w-[12%]
+                border-r border-[#c9a646]/25
+                bg-[#096149]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wide md:text-sm">
+                      Sunnat
+                    </div>
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">Before</div>
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
+                      Before
+                    </div>
                   </th>
 
-                  <th className="w-[14%] bg-blue-600 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Farz</div>
+                  {/* FARZ */}
+                  <th
+                    className="
+                relative
+                w-[14%]
+                border-r border-[#d8b957]/50
+                bg-[#07553f]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="absolute inset-x-0 top-0 h-[2px] bg-[#d7b54b]" />
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">
+                    <div className="text-xs font-bold uppercase tracking-wide text-[#ffe49a] md:text-sm">
+                      Farz
+                    </div>
+
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
                       Obligatory
                     </div>
                   </th>
 
-                  <th className="w-[12%] bg-orange-600 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Sunnat</div>
+                  {/* SUNNAT AFTER */}
+                  <th
+                    className="
+                w-[12%]
+                border-r border-[#c9a646]/25
+                bg-[#096149]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wide md:text-sm">
+                      Sunnat
+                    </div>
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">After</div>
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
+                      After
+                    </div>
                   </th>
 
-                  <th className="w-[11%] bg-purple-700 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Nafl</div>
+                  {/* NAFL */}
+                  <th
+                    className="
+                w-[11%]
+                border-r border-[#c9a646]/25
+                bg-[#07553f]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wide md:text-sm">Nafl</div>
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
                       Recommended
                     </div>
                   </th>
 
-                  <th className="w-[10%] bg-amber-700 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Witr</div>
+                  {/* WITR */}
+                  <th
+                    className="
+                w-[10%]
+                border-r border-[#c9a646]/25
+                bg-[#096149]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wide md:text-sm">Witr</div>
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">Wajib</div>
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
+                      Wajib
+                    </div>
                   </th>
 
-                  <th className="w-[11%] bg-purple-700 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Nafl</div>
+                  {/* NAFL AFTER */}
+                  <th
+                    className="
+                w-[11%]
+                border-r border-[#c9a646]/25
+                bg-[#07553f]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wide md:text-sm">Nafl</div>
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
                       Recommended
                     </div>
                   </th>
 
-                  <th className="w-[10%] bg-emerald-800 px-4 py-5 text-center">
-                    <div className="text-sm font-bold uppercase">Total</div>
+                  {/* TOTAL */}
+                  <th
+                    className="
+                w-[10%]
+                bg-[#064b38]
+                px-3 py-4
+                text-center
+                sm:px-4
+                md:py-5
+              "
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wide md:text-sm">
+                      Total
+                    </div>
 
-                    <div className="text-[10px] uppercase tracking-wider opacity-80">Raka'at</div>
+                    <div className="mt-1 text-[9px] uppercase tracking-wider text-[#f5df98] md:text-[10px]">
+                      Raka'at
+                    </div>
                   </th>
                 </tr>
               </thead>
 
+              {/* =====================================================
+            TABLE BODY
+        ===================================================== */}
               <tbody>
                 {rakaatData.map((prayer) => {
                   const Icon = prayer.icon;
@@ -669,118 +839,234 @@ function HomePage() {
                   return (
                     <tr
                       key={prayer.name}
-                      className="border-b border-border/60 transition-colors hover:bg-muted/30 last:border-b-0"
+                      className="
+                  border-b
+                  border-[#c9a646]/20
+                  transition-colors
+                  duration-200
+                  last:border-b-0
+                  hover:bg-[#f8f3df]
+                  dark:border-[#c9a646]/15
+                  dark:hover:bg-[#063d2f]
+                "
                     >
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-4">
+                      {/* =================================================
+                    PRAYER
+                ================================================= */}
+                      <td className="px-4 py-4 sm:px-5 md:px-6 md:py-5">
+                        <div className="flex items-center gap-3 md:gap-4">
                           <div
-                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${prayer.bg}`}
+                            className="
+                        flex
+                        h-11 w-11
+                        shrink-0
+                        items-center justify-center
+                        rounded-full
+                        border border-[#c9a646]
+                        bg-[#f8f0d1]
+                        dark:bg-[#062f25]
+                        md:h-12 md:w-12
+                      "
                           >
-                            <Icon className={`h-6 w-6 ${prayer.color}`} />
+                            <Icon className="h-5 w-5 text-[#a8842f] dark:text-[#e2bd55] md:h-6 md:w-6" />
                           </div>
 
-                          <div>
-                            <div className={`font-display text-xl font-bold ${prayer.color}`}>
+                          <div className="min-w-0">
+                            <div
+                              className="
+                          font-display
+                          text-lg
+                          font-bold
+                          leading-tight
+                          text-[#07553f]
+                          dark:text-[#e2bd55]
+                          md:text-xl
+                        "
+                            >
                               {prayer.name}
                             </div>
 
-                            <div className="text-xs text-muted-foreground">{prayer.subtitle}</div>
+                            <div className="mt-1 text-[11px] text-muted-foreground md:text-xs">
+                              {prayer.subtitle}
+                            </div>
                           </div>
                         </div>
                       </td>
 
-                      <td className="px-4 py-5 text-center">
+                      {/* =================================================
+                    SUNNAT BEFORE
+                ================================================= */}
+                      <td className="border-l border-[#c9a646]/15 px-3 py-4 text-center md:px-4 md:py-5">
                         <div
-                          className={`text-2xl font-bold ${
-                            prayer.before === "-" ? "text-muted-foreground" : "text-foreground"
-                          }`}
+                          className={`
+                      text-2xl
+                      font-bold
+                      md:text-3xl
+                      ${
+                        prayer.before === "-"
+                          ? "text-muted-foreground"
+                          : "text-[#173d32] dark:text-[#f6f0d8]"
+                      }
+                    `}
                         >
                           {prayer.before}
                         </div>
 
                         {prayer.before !== "-" && prayer.beforeLabel && (
-                          <div className="mt-1 text-[10px] text-muted-foreground">
+                          <div className="mt-1 text-[9px] text-muted-foreground md:text-[10px]">
                             {prayer.beforeLabel}
                           </div>
                         )}
                       </td>
 
-                      <td className="bg-blue-50/60 px-4 py-5 text-center dark:bg-blue-950/20">
-                        <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
+                      {/* =================================================
+                    FARZ
+                ================================================= */}
+                      <td
+                        className="
+                    border-l
+                    border-[#c9a646]/20
+                    bg-[#f7f0d5]/70
+                    px-3 py-4
+                    text-center
+                    dark:bg-[#b99745]/[0.07]
+                    md:px-4 md:py-5
+                  "
+                      >
+                        <div className="font-display text-3xl font-bold text-[#b58b2c] dark:text-[#e5c45c] md:text-4xl">
                           {prayer.Farz}
                         </div>
 
-                        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                        <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-[#9c7825] dark:text-[#d5b754] md:text-[10px]">
                           Farz
                         </div>
                       </td>
 
-                      <td className="px-4 py-5 text-center">
+                      {/* =================================================
+                    SUNNAT AFTER
+                ================================================= */}
+                      <td className="border-l border-[#c9a646]/15 px-3 py-4 text-center md:px-4 md:py-5">
                         <div
-                          className={`text-2xl font-bold ${
-                            prayer.after === "-" ? "text-muted-foreground" : "text-foreground"
-                          }`}
+                          className={`
+                      text-2xl
+                      font-bold
+                      md:text-3xl
+                      ${
+                        prayer.after === "-"
+                          ? "text-muted-foreground"
+                          : "text-[#173d32] dark:text-[#f6f0d8]"
+                      }
+                    `}
                         >
                           {prayer.after}
                         </div>
 
                         {prayer.after !== "-" && prayer.afterLabel && (
-                          <div className="mt-1 text-[10px] text-muted-foreground">
+                          <div className="mt-1 text-[9px] text-muted-foreground md:text-[10px]">
                             {prayer.afterLabel}
                           </div>
                         )}
                       </td>
 
-                      <td className="px-4 py-5 text-center">
+                      {/* =================================================
+                    NAFL
+                ================================================= */}
+                      <td className="border-l border-[#c9a646]/15 px-3 py-4 text-center md:px-4 md:py-5">
                         <div
-                          className={`text-2xl font-bold ${
-                            prayer.nafl === "-" ? "text-muted-foreground" : "text-foreground"
-                          }`}
+                          className={`
+                      text-2xl
+                      font-bold
+                      md:text-3xl
+                      ${
+                        prayer.nafl === "-"
+                          ? "text-muted-foreground"
+                          : "text-[#173d32] dark:text-[#f6f0d8]"
+                      }
+                    `}
                         >
                           {prayer.nafl}
                         </div>
 
                         {"naflLabel" in prayer && prayer.nafl !== "-" && prayer.naflLabel && (
-                          <div className="mt-1 text-[10px] text-muted-foreground">
+                          <div className="mt-1 text-[9px] text-muted-foreground md:text-[10px]">
                             {prayer.naflLabel}
                           </div>
                         )}
                       </td>
 
-                      <td className="px-4 py-5 text-center">
+                      {/* =================================================
+                    WITR
+                ================================================= */}
+                      <td className="border-l border-[#c9a646]/15 px-3 py-4 text-center md:px-4 md:py-5">
                         <div
-                          className={`text-2xl font-bold ${
-                            prayer.witr === "-" ? "text-muted-foreground" : "text-gold"
-                          }`}
+                          className={`
+                      text-2xl
+                      font-bold
+                      md:text-3xl
+                      ${
+                        prayer.witr === "-"
+                          ? "text-muted-foreground"
+                          : "text-[#b58b2c] dark:text-[#e8c765]"
+                      }
+                    `}
                         >
                           {prayer.witr}
                         </div>
 
                         {prayer.witr !== "-" && (
-                          <div className="mt-1 text-[10px] text-muted-foreground">Wajib</div>
+                          <div className="mt-1 text-[9px] text-muted-foreground md:text-[10px]">
+                            Wajib
+                          </div>
                         )}
                       </td>
 
-                      <td className="px-4 py-5 text-center">
+                      {/* =================================================
+                    NAFL AFTER
+                ================================================= */}
+                      <td className="border-l border-[#c9a646]/15 px-3 py-4 text-center md:px-4 md:py-5">
                         <div
-                          className={`text-2xl font-bold ${
-                            prayer.naflAfter === "-" ? "text-muted-foreground" : "text-foreground"
-                          }`}
+                          className={`
+                      text-2xl
+                      font-bold
+                      md:text-3xl
+                      ${
+                        prayer.naflAfter === "-"
+                          ? "text-muted-foreground"
+                          : "text-[#173d32] dark:text-[#f6f0d8]"
+                      }
+                    `}
                         >
                           {prayer.naflAfter}
                         </div>
 
                         {prayer.naflAfter !== "-" && (
-                          <div className="mt-1 text-[10px] text-muted-foreground">Nafl</div>
+                          <div className="mt-1 text-[9px] text-muted-foreground md:text-[10px]">
+                            Nafl
+                          </div>
                         )}
                       </td>
 
-                      <td className="bg-emerald-50/70 px-4 py-5 text-center dark:bg-emerald-950/20">
-                        <div className="font-display text-3xl font-bold text-primary">
+                      {/* =================================================
+                    TOTAL
+                ================================================= */}
+                      <td
+                        className="
+                    border-l
+                    border-[#c9a646]/20
+                    bg-[#f7f0d5]/70
+                    px-3 py-4
+                    text-center
+                    dark:bg-[#b99745]/[0.07]
+                    md:px-4 md:py-5
+                  "
+                      >
+                        <div className="font-display text-3xl font-bold text-[#9d7824] dark:text-[#e5c45c] md:text-4xl">
                           {prayer.total}
                         </div>
 
-                        <div className="text-[10px] text-muted-foreground">Raka'at</div>
+                        <div className="mt-1 text-[9px] text-muted-foreground md:text-[10px]">
+                          Raka'at
+                        </div>
                       </td>
                     </tr>
                   );
@@ -790,15 +1076,52 @@ function HomePage() {
           </div>
         </div>
 
-        {/* INFORMATION CARDS */}
+        {/* =========================================================
+      MOBILE SCROLL HINT
+  ========================================================= */}
+        <div className="mt-2 flex items-center justify-center gap-2 text-[10px] text-muted-foreground sm:hidden">
+          <span>←</span>
+          <span>Swipe horizontally to view the complete table</span>
+          <span>→</span>
+        </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
-              <Clock className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+        {/* =========================================================
+      INFORMATION CARDS
+  ========================================================= */}
+        <div className="mt-5 grid gap-3 sm:mt-6 sm:gap-4 md:grid-cols-3">
+          {/* CARD 1 */}
+          <div
+            className="
+        rounded-2xl
+        border border-[#c9a646]/25
+        bg-[#fffdf5]
+        p-5
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-0.5
+        hover:border-[#c9a646]/50
+        dark:border-[#c9a646]/20
+        dark:bg-[#032a21]
+        dark:hover:border-[#c9a646]/40
+        sm:p-6
+      "
+          >
+            <div
+              className="
+          mb-4
+          flex h-10 w-10 items-center justify-center
+          rounded-full
+          border border-[#c9a646]/30
+          bg-[#f6efd5]
+          dark:bg-[#b99745]/10
+        "
+            >
+              <Clock className="h-5 w-5 text-[#a27c26] dark:text-[#d7b957]" />
             </div>
 
-            <h3 className="font-display text-xl text-primary">Prayer Times</h3>
+            <h3 className="font-display text-xl text-[#07553f] dark:text-[#e4c45d]">
+              Prayer Times
+            </h3>
 
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               Stay updated with today's Salah timings and easily keep track of the next prayer
@@ -806,12 +1129,37 @@ function HomePage() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
-              <Sparkles className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+          {/* CARD 2 */}
+          <div
+            className="
+        rounded-2xl
+        border border-[#c9a646]/25
+        bg-[#fffdf5]
+        p-5
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-0.5
+        hover:border-[#c9a646]/50
+        dark:border-[#c9a646]/20
+        dark:bg-[#032a21]
+        dark:hover:border-[#c9a646]/40
+        sm:p-6
+      "
+          >
+            <div
+              className="
+          mb-4
+          flex h-10 w-10 items-center justify-center
+          rounded-full
+          border border-[#c9a646]/30
+          bg-[#f6efd5]
+          dark:bg-[#b99745]/10
+        "
+            >
+              <Sparkles className="h-5 w-5 text-[#a27c26] dark:text-[#d7b957]" />
             </div>
 
-            <h3 className="font-display text-xl text-primary">About Salah</h3>
+            <h3 className="font-display text-xl text-[#07553f] dark:text-[#e4c45d]">About Salah</h3>
 
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               Salah is one of the most important acts of worship in Islam. Performing the five daily
@@ -819,12 +1167,39 @@ function HomePage() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950/30">
-              <Calendar className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+          {/* CARD 3 */}
+          <div
+            className="
+        rounded-2xl
+        border border-[#c9a646]/25
+        bg-[#fffdf5]
+        p-5
+        shadow-sm
+        transition-all duration-300
+        hover:-translate-y-0.5
+        hover:border-[#c9a646]/50
+        dark:border-[#c9a646]/20
+        dark:bg-[#032a21]
+        dark:hover:border-[#c9a646]/40
+        sm:p-6
+      "
+          >
+            <div
+              className="
+          mb-4
+          flex h-10 w-10 items-center justify-center
+          rounded-full
+          border border-[#c9a646]/30
+          bg-[#f6efd5]
+          dark:bg-[#b99745]/10
+        "
+            >
+              <Calendar className="h-5 w-5 text-[#a27c26] dark:text-[#d7b957]" />
             </div>
 
-            <h3 className="font-display text-xl text-primary">Stay Connected</h3>
+            <h3 className="font-display text-xl text-[#07553f] dark:text-[#e4c45d]">
+              Stay Connected
+            </h3>
 
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               Keep up with Masjid announcements, Islamic events, and important community updates in
