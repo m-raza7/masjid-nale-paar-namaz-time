@@ -446,7 +446,7 @@ function HomePage() {
               </div>
 
               <div className="mt-3 flex items-baseline justify-between">
-                <div className="font-display text-5xl sm:text-4xl md:text-5xl lg:text-6xl text-primary">
+                <div className="font-display text-4xl sm:text-4xl md:text-5xl lg:text-6xl text-primary">
                   {next?.name ?? "—"}
                 </div>
 
